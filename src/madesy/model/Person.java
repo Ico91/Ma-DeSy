@@ -3,11 +3,11 @@ package madesy.model;
 import madesy.storage.PickingStorage;
 
 public abstract class Person implements Runnable {
-	protected int id;
+	protected String id;
 	protected String name;
 	protected PickingStorage pickingStorage;
 	
-	public Person(int id, String name, PickingStorage pickingStorage) {
+	public Person(String id, String name, PickingStorage pickingStorage) {
 		this.id = id;
 		this.name = name;
 		this.pickingStorage = pickingStorage;
@@ -21,7 +21,7 @@ public abstract class Person implements Runnable {
 
 	@Override
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 
 	@Override
@@ -38,11 +38,11 @@ public abstract class Person implements Runnable {
 		return true;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

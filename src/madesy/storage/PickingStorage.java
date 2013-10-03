@@ -23,4 +23,8 @@ public class PickingStorage {
 	public void markPickingTaken() {
 		
 	}
+	
+	public List<Picking> getPickings() {
+		return this.pickings;
+	}
 }

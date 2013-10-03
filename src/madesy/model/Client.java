@@ -4,7 +4,7 @@ import madesy.storage.PickingStorage;
 
 public class Client extends Person {
 	
-	public Client(int id, String name, PickingStorage pickingStorage) {
+	public Client(String id, String name, PickingStorage pickingStorage) {
 		super(id, name, pickingStorage);
 	}
 	
