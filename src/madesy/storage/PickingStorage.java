@@ -10,18 +10,19 @@ import madesy.model.PickingStates;
 
 public class PickingStorage {
 	private List<Picking> pickings;
+	private final Lock lock;
 	
 	public PickingStorage() {
 		pickings = new CopyOnWriteArrayList<Picking>();
+		lock = new ReentrantLock();
 	}
 	
 	public void newPicking(Picking picking) {
-		
+		pickings.add(picking);
 	}
 	
 	public Picking pickingToDispatch() {
 		Picking picking = null;
-		Lock lock = new ReentrantLock();
 		lock.lock();
 		try {
 			for(int i = 0; i < pickings.size(); i ++) {
@@ -39,6 +40,12 @@ public class PickingStorage {
 	}
 	
 	public void markPickingTaken(Picking picking) {
-		
+		lock.lock();
+		try {
+			int index = pickings.indexOf(picking);
+			pickings.get(index).setPickingStates(PickingStates.TAKEN);
+		} finally {
+			lock.unlock();
+		}
 	}
 }
