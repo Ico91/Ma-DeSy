@@ -14,6 +14,13 @@ public class Courrier extends Person {
 	public void run() {
 		while(!Thread.currentThread().isInterrupted()) {
 			dispatchPicking();
+			Random rand = new Random();
+			
+			try {
+				Thread.sleep(rand.nextInt(5000));
+			} catch(InterruptedException e) {
+				// TODO: on interrupt?
+			}
 		}
 	}
 	
@@ -23,9 +30,9 @@ public class Courrier extends Person {
 		if(dispatchedPicking == null)
 			return;
 		
-		Random rand = new Random();
+		/*Random rand = new Random();
 		
-		/*try {
+		try {
 			Thread.sleep(rand.nextInt(5000));
 		} catch(InterruptedException e) {
 			// TODO: on interrupt?

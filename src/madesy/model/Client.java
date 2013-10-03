@@ -17,6 +17,13 @@ public class Client extends Person {
 	public void run() {
 		while(!Thread.currentThread().isInterrupted()) {
 			super.getPickingStorage().newPicking(this.makeNewPicking());
+			Random rand = new Random();
+			
+			try {
+				Thread.sleep(rand.nextInt(2000) + 1000);
+			} catch(InterruptedException e) {
+				// TODO: on interrupt?
+			}
 		}
 	}
 	
