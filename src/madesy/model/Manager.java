@@ -50,11 +50,14 @@ public class Manager extends Person {
 	private Map<PickingStates, Integer> getCountOfAllPickingStates() {
 		Map<PickingStates, Integer> countOfPickingStates = new HashMap<PickingStates, Integer>();
 		List<Picking> listOfPickings = this.pickingStorage.getPickings();
-
+		
+		countOfPickingStates.put(PickingStates.NEW, 0);
+		countOfPickingStates.put(PickingStates.DISPATCHED, 0);
+		countOfPickingStates.put(PickingStates.TAKEN, 0);
+		
 		for (Picking p : listOfPickings) {
 			PickingStates state = p.getPickingStates();
-			int count = (countOfPickingStates.containsKey(state)) ? countOfPickingStates
-					.get(state) + 1 : 1;
+			int count = countOfPickingStates.get(state);
 			
 			countOfPickingStates.put(state, count);
 		}
