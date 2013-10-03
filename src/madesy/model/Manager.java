@@ -41,12 +41,7 @@ public class Manager extends Person {
 		int dispachedPickings = countOfPickingStates.get(PickingStates.DISPATCHED);
 		int takenPickings = countOfPickingStates.get(PickingStates.TAKEN);
 		
-		if(newPickings  > Math.max(dispachedPickings, takenPickings))
-			logReport(TOO_MANY_NEW);
-		if(dispachedPickings > Math.max(newPickings, takenPickings))
-			logReport(TOO_MANY_DISPACHED);
-		if(takenPickings > Math.max(newPickings, dispachedPickings))
-			logReport(TOO_MANY_TAKEN);
+		logReport("NEW: " + newPickings + " DISPACHED: " + dispachedPickings + " TAKEN: " + takenPickings);
 	}
 	
 	private Map<PickingStates, Integer> getCountOfAllPickingStates() {
