@@ -6,9 +6,9 @@ public class Picking {
 	private String id;
 	private List<Integer> barcodes;
 	private PickingStates pickingStates;
-	private int clientId;
+	private String clientId;
 	
-	public Picking(String id, List<Integer> barcodes, PickingStates pickingStates, int clientId) {
+	public Picking(String id, List<Integer> barcodes, PickingStates pickingStates, String clientId) {
 		this.id = id;
 		this.barcodes = barcodes;
 		this.pickingStates = pickingStates;
@@ -52,10 +52,10 @@ public class Picking {
 	public void setPickingStates(PickingStates pickingStates) {
 		this.pickingStates = pickingStates;
 	}
-	public int getClientId() {
+	public String getClientId() {
 		return clientId;
 	}
-	public void setClientId(int clientId) {
+	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 	

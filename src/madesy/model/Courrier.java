@@ -6,7 +6,7 @@ import madesy.storage.PickingStorage;
 
 public class Courrier extends Person {
 	
-	public Courrier(int id, String name, PickingStorage pickingStorage)
+	public Courrier(String id, String name, PickingStorage pickingStorage)
 	{
 		super(id, name, pickingStorage);
 	}
