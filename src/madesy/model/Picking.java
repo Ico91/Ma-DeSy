@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Picking {
 	private String id;
-	private List<String> barcodes;
+	private List<Integer> barcodes;
 	private PickingStates pickingStates;
 	private int clientId;
 	
-	public Picking(String id, List<String> barcodes, PickingStates pickingStates, int clientId) {
+	public Picking(String id, List<Integer> barcodes, PickingStates pickingStates, int clientId) {
 		this.id = id;
 		this.barcodes = barcodes;
 		this.pickingStates = pickingStates;
@@ -40,10 +40,10 @@ public class Picking {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public List<String> getBarcodes() {
+	public List<Integer> getBarcodes() {
 		return barcodes;
 	}
-	public void setBarcodes(List<String> barcodes) {
+	public void setBarcodes(List<Integer> barcodes) {
 		this.barcodes = barcodes;
 	}
 	public PickingStates getPickingStates() {
