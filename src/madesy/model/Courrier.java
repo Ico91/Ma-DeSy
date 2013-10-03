@@ -12,7 +12,9 @@ public class Courrier extends Person {
 	}
 	
 	public void run() {
-		dispatchPicking();
+		while(!Thread.currentThread().isInterrupted()) {
+			dispatchPicking();
+		}
 	}
 	
 	private void dispatchPicking() {
@@ -23,11 +25,11 @@ public class Courrier extends Person {
 		
 		Random rand = new Random();
 		
-		try {
-			Thread.sleep(5000);
+		/*try {
+			Thread.sleep(rand.nextInt(5000));
 		} catch(InterruptedException e) {
 			// TODO: on interrupt?
-		}
+		}*/
 		
 		takePicking(dispatchedPicking);
 	}

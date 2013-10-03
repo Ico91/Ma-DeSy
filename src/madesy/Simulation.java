@@ -18,7 +18,6 @@ public class Simulation {
 		pool.submit(new Courrier(UUID.randomUUID().toString(), "courrier", pickingsStorage));
 		pool.submit(new Manager(pickingsStorage));
 		
-		
-		
+		pool.shutdown();
 	}
 }

@@ -15,7 +15,9 @@ public class Client extends Person {
 	
 	@Override
 	public void run() {
-		super.getPickingStorage().newPicking(this.makeNewPicking());
+		while(!Thread.currentThread().isInterrupted()) {
+			super.getPickingStorage().newPicking(this.makeNewPicking());
+		}
 	}
 	
 	private Picking makeNewPicking() {

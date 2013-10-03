@@ -29,6 +29,9 @@ public class Manager extends Person {
 	public void run() {
 		System.out.println("manager started");
 		generateReports(getCountOfAllPickingStates());
+		while(!Thread.currentThread().isInterrupted()) {
+			generateReports(getCountOfAllPickingStates());
+		}
 	}
 
 	private void logReport(String report) {

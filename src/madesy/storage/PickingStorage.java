@@ -19,6 +19,7 @@ public class PickingStorage {
 	
 	public void newPicking(Picking picking) {
 		pickings.add(picking);
+		System.out.println(picking);
 		System.out.println("Added new picking");
 	}
 	
@@ -27,7 +28,6 @@ public class PickingStorage {
 		lock.lock();
 		try {
 			for(int i = 0; i < pickings.size(); i ++) {
-				System.out.println(pickings.get(i));
 				// get index of first picking marked as new
 				if(pickings.get(i).getPickingStates() == PickingStates.NEW) {
 					pickings.get(i).setPickingStates(PickingStates.DISPATCHED);
@@ -49,6 +49,7 @@ public class PickingStorage {
 			int index = pickings.indexOf(picking);
 			pickings.get(index).setPickingStates(PickingStates.TAKEN);
 			System.out.println("Taken");
+			System.out.println(pickings.get(index));
 		} finally {
 			lock.unlock();
 		}
