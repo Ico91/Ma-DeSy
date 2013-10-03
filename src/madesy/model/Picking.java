@@ -16,6 +16,13 @@ public class Picking {
 	}
 	
 	@Override
+	public String toString() {
+		return "Picking [id=" + id + ", barcodes=" + barcodes
+				+ ", pickingStates=" + pickingStates + ", clientId=" + clientId
+				+ "]";
+	}
+
+	@Override
 	public int hashCode() {;
 		return id.hashCode();
 	}

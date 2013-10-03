@@ -27,6 +27,7 @@ public class Manager extends Person {
 
 	@Override
 	public void run() {
+		System.out.println("manager started");
 		generateReports(getCountOfAllPickingStates());
 	}
 
@@ -45,6 +46,9 @@ public class Manager extends Person {
 			logReport(TOO_MANY_DISPACHED);
 		if(takenPickings > Math.max(newPickings, dispachedPickings))
 			logReport(TOO_MANY_TAKEN);
+		if(newPickings == dispachedPickings && dispachedPickings == takenPickings) {
+			logReport("equals");
+		}
 	}
 	
 	private Map<PickingStates, Integer> getCountOfAllPickingStates() {
@@ -57,7 +61,7 @@ public class Manager extends Person {
 		
 		for (Picking p : listOfPickings) {
 			PickingStates state = p.getPickingStates();
-			int count = countOfPickingStates.get(state);
+			int count = countOfPickingStates.get(state) + 1;
 			
 			countOfPickingStates.put(state, count);
 		}

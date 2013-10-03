@@ -19,6 +19,7 @@ public class PickingStorage {
 	
 	public void newPicking(Picking picking) {
 		pickings.add(picking);
+		System.out.println("Added new picking");
 	}
 	
 	public Picking pickingToDispatch() {
@@ -26,16 +27,19 @@ public class PickingStorage {
 		lock.lock();
 		try {
 			for(int i = 0; i < pickings.size(); i ++) {
+				System.out.println(pickings.get(i));
 				// get index of first picking marked as new
-				if(pickings.get(i).getPickingStates().toString().equals(PickingStates.NEW)) {
+				if(pickings.get(i).getPickingStates() == PickingStates.NEW) {
 					pickings.get(i).setPickingStates(PickingStates.DISPATCHED);
 					picking = pickings.get(i);
+					System.out.println("Dispatched");
 					break;
 				}
 			}
 		} finally {
 			lock.unlock();
 		}
+		
 		return picking;
 	}
 	
@@ -44,6 +48,7 @@ public class PickingStorage {
 		try {
 			int index = pickings.indexOf(picking);
 			pickings.get(index).setPickingStates(PickingStates.TAKEN);
+			System.out.println("Taken");
 		} finally {
 			lock.unlock();
 		}
@@ -52,4 +57,11 @@ public class PickingStorage {
 	public List<Picking> getPickings() {
 		return this.pickings;
 	}
+
+	@Override
+	public String toString() {
+		return "PickingStorage [pickings=" + pickings + "]";
+	}
+	
+	
 }

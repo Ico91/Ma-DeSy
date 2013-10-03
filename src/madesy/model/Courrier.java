@@ -17,14 +17,14 @@ public class Courrier extends Person {
 	
 	private void dispatchPicking() {
 		Picking dispatchedPicking = pickingStorage.pickingToDispatch();
-		
+		System.out.println(dispatchedPicking);
 		if(dispatchedPicking == null)
 			return;
 		
 		Random rand = new Random();
 		
 		try {
-			Thread.sleep(rand.nextInt(5000));
+			Thread.sleep(5000);
 		} catch(InterruptedException e) {
 			// TODO: on interrupt?
 		}
