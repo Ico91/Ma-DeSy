@@ -27,7 +27,9 @@ public class Manager extends Person {
 
 	@Override
 	public void run() {
-		generateReports(getCountOfAllPickingStates());
+		while(!Thread.currentThread().isInterrupted()) {
+			generateReports(getCountOfAllPickingStates());
+		}
 	}
 
 	private void logReport(String report) {
