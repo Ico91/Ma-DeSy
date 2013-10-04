@@ -9,18 +9,29 @@ import madesy.storage.PickingStorage;
 
 public class Client extends Person {
 	
+	private int live;
+	
 	public Client(String id, String name, PickingStorage pickingStorage) {
 		super(id, name, pickingStorage);
+		live = 0;
 	}
 	
 	@Override
-	public void run() {
+	public void run() {		
 		while(!Thread.currentThread().isInterrupted()) {
 			super.getPickingStorage().newPicking(this.makeNewPicking());
 			Random rand = new Random();
 			
 			try {
-				Thread.sleep(rand.nextInt(2000) + 1000);
+				live++;
+				System.out.println(this.name + " " + live);
+				if ((live == 10)) {
+					
+					System.out.println(this.name + " is interrupted");
+					
+					Thread.currentThread().interrupt();
+				} else 
+					Thread.sleep(rand.nextInt(2000) + 1000);
 			} catch(InterruptedException e) {
 				// TODO: on interrupt?
 			}
