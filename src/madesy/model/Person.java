@@ -4,18 +4,16 @@ import madesy.storage.PickingStorage;
 
 public abstract class Person implements Runnable {
 	protected String id;
-	protected String name;
 	protected PickingStorage pickingStorage;
 	
-	public Person(String id, String name, PickingStorage pickingStorage) {
+	public Person(String id, PickingStorage pickingStorage) {
 		this.id = id;
-		this.name = name;
 		this.pickingStorage = pickingStorage;
 	}
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", name=" + name + ", pickingStorage="
+		return "Person [id=" + id + ", pickingStorage="
 				+ pickingStorage + "]";
 	}
 
@@ -44,14 +42,6 @@ public abstract class Person implements Runnable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public PickingStorage getPickingStorage() {

@@ -5,20 +5,20 @@ import java.util.List;
 public class Picking {
 	private String id;
 	private List<Integer> barcodes;
-	private PickingStates pickingStates;
+	private PickingStates pickingStatus;
 	private String clientId;
 	
-	public Picking(String id, List<Integer> barcodes, PickingStates pickingStates, String clientId) {
+	public Picking(String id, List<Integer> barcodes, PickingStates pickingStatus, String clientId) {
 		this.id = id;
 		this.barcodes = barcodes;
-		this.pickingStates = pickingStates;
+		this.pickingStatus = pickingStatus;
 		this.clientId = clientId;
 	}
 	
 	@Override
 	public String toString() {
 		return "Picking [id=" + id + ", barcodes=" + barcodes
-				+ ", pickingStates=" + pickingStates + ", clientId=" + clientId
+				+ ", pickingStatus=" + pickingStatus + ", clientId=" + clientId
 				+ "]";
 	}
 
@@ -54,10 +54,10 @@ public class Picking {
 		this.barcodes = barcodes;
 	}
 	public PickingStates getPickingStates() {
-		return pickingStates;
+		return pickingStatus;
 	}
-	public void setPickingStates(PickingStates pickingStates) {
-		this.pickingStates = pickingStates;
+	public void setPickingStates(PickingStates pickingStatus) {
+		this.pickingStatus = pickingStatus;
 	}
 	public String getClientId() {
 		return clientId;
