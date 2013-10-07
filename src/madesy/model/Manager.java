@@ -25,22 +25,10 @@ public class Manager extends Person {
 	}
 
 	@Override
-	public void run() {
-		System.out.println("manager started");
+	public void doWork() {
 		generateReports(getCountOfAllPickingStates());
-		while (!Thread.currentThread().isInterrupted()) {
-			generateReports(getCountOfAllPickingStates());
-			Random rand = new Random();
-
-			try {
-				Thread.sleep(rand.nextInt(1000) + 1000);
-			} catch (InterruptedException e) {
-				System.out.println("Manager is interrupted.");
-				return;
-			}
-		}
 	}
-
+	
 	private void logReport(String report) {
 		System.out.println(report);
 	}

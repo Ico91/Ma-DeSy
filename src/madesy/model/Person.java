@@ -1,5 +1,7 @@
 package madesy.model;
 
+import java.util.Random;
+
 import madesy.storage.PickingStorage;
 
 public abstract class Person implements Runnable {
@@ -9,6 +11,26 @@ public abstract class Person implements Runnable {
 	public Person(String id, PickingStorage pickingStorage) {
 		this.id = id;
 		this.pickingStorage = pickingStorage;
+	}
+	
+	public abstract void  doWork();
+	
+	@Override
+	public void run() {
+		while (!Thread.currentThread().isInterrupted()) {
+			doWork();
+			threadToSleep(1000);
+		}
+	}
+
+	protected void threadToSleep(long interval) {
+		Random rand = new Random();
+		try {
+			Thread.sleep(rand.nextInt(1000) + interval);
+		} catch (InterruptedException e) {
+			System.out.println("Courrier " + this.id + " is interrupted.");
+			return;
+		}
 	}
 
 	@Override

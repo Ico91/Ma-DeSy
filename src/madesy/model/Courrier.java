@@ -1,7 +1,5 @@
 package madesy.model;
 
-import java.util.Random;
-
 import madesy.storage.PickingStorage;
 
 public class Courrier extends Person {
@@ -10,37 +8,21 @@ public class Courrier extends Person {
 		super(id, pickingStorage);
 	}
 
-	public void run() {
-		while (!Thread.currentThread().isInterrupted()) {
-			dispatchPicking();
-			Random rand = new Random();
-			try {
-				Thread.sleep(rand.nextInt(1000));
-			} catch (InterruptedException e) {
-				System.out.println("Courrier " + this.id + " is interrupted.");
-				return;
-			}
-		}
+	@Override
+	public void doWork() {
+		dispatchPicking();
 	}
 
 	private void dispatchPicking() {
 		Picking dispatchedPicking = pickingStorage.pickingToDispatch();
 		if (dispatchedPicking == null)
 			return;
-
-		Random rand = new Random();
-
-		try {
-			Thread.sleep(rand.nextInt(1000) + 1000);
-		} catch (InterruptedException e) {
-			System.out.println("Courrier " + this.id + " is interrupted.");
-			return;
-		}
-
+		threadToSleep(2000);
 		takePicking(dispatchedPicking);
 	}
 
 	private void takePicking(Picking picking) {
 		pickingStorage.markPickingTaken(picking);
 	}
+
 }
