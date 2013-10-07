@@ -15,12 +15,12 @@ import madesy.storage.PickingStorage;
  * @author Krasimir Atanasov
  * 
  */
-public class Manager extends Person {
+public class ManagerWorker extends BaseWorker {
 	private static final String TOO_MANY_NEW = "Too many new pickings";
 	private static final String TOO_MANY_DISPACHED = "Too many dispached pickings";
 	private static final String TOO_MANY_TAKEN = "Too many taken pickings";
 
-	public Manager(PickingStorage pickingStorage) {
+	public ManagerWorker(PickingStorage pickingStorage) {
 		super(UUID.randomUUID().toString(), pickingStorage);
 	}
 

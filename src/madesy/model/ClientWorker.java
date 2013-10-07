@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import madesy.storage.PickingStorage;
 
-public class Client extends Person {
+public class ClientWorker extends BaseWorker {
 
-	public Client(String id, PickingStorage pickingStorage) {
+	public ClientWorker(String id, PickingStorage pickingStorage) {
 		super(id, pickingStorage);
 	}
 

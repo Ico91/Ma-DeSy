@@ -4,11 +4,11 @@ import java.util.Random;
 
 import madesy.storage.PickingStorage;
 
-public abstract class Person implements Runnable {
+public abstract class BaseWorker implements Runnable {
 	protected String id;
 	protected PickingStorage pickingStorage;
 	
-	public Person(String id, PickingStorage pickingStorage) {
+	public BaseWorker(String id, PickingStorage pickingStorage) {
 		this.id = id;
 		this.pickingStorage = pickingStorage;
 	}
@@ -52,7 +52,7 @@ public abstract class Person implements Runnable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Person other = (Person) obj;
+		BaseWorker other = (BaseWorker) obj;
 		if (id != other.id)
 			return false;
 		return true;

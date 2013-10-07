@@ -2,9 +2,9 @@ package madesy.model;
 
 import madesy.storage.PickingStorage;
 
-public class Courrier extends Person {
+public class CourrierWorker extends BaseWorker {
 
-	public Courrier(String id, PickingStorage pickingStorage) {
+	public CourrierWorker(String id, PickingStorage pickingStorage) {
 		super(id, pickingStorage);
 	}
 
