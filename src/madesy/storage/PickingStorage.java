@@ -17,9 +17,9 @@ public class PickingStorage {
 	private EventBuilder eventBuilder;
 	private final Lock lock;
 	
-	public PickingStorage() {
+	public PickingStorage(EventLog eventLog) {
 		pickings = new ArrayList<Picking>();
-		eventLog = new EventLog();
+		this.eventLog = eventLog;
 		eventBuilder = new EventBuilder();
 		lock = new ReentrantLock();
 	}
