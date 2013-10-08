@@ -1,7 +1,7 @@
 package madesy.storage;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,7 +18,7 @@ public class PickingStorage {
 	private final Lock lock;
 	
 	public PickingStorage() {
-		pickings = new CopyOnWriteArrayList<Picking>();
+		pickings = new ArrayList<Picking>();
 		eventLog = new EventLog();
 		eventBuilder = new EventBuilder();
 		lock = new ReentrantLock();
