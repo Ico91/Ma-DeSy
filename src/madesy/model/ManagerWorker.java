@@ -34,26 +34,26 @@ public class ManagerWorker extends BaseWorker {
 	}
 
 	private void generateReports(
-			Map<PickingStates, Integer> countOfPickingStates) {
-		int newPickings = countOfPickingStates.get(PickingStates.NEW);
+			Map<PickingStatus, Integer> countOfPickingStates) {
+		int newPickings = countOfPickingStates.get(PickingStatus.NEW);
 		int dispachedPickings = countOfPickingStates
-				.get(PickingStates.DISPATCHED);
-		int takenPickings = countOfPickingStates.get(PickingStates.TAKEN);
+				.get(PickingStatus.DISPATCHED);
+		int takenPickings = countOfPickingStates.get(PickingStatus.TAKEN);
 
 		logReport("NEW: " + newPickings + " DISPACHED: " + dispachedPickings
 				+ " TAKEN: " + takenPickings);
 	}
 
-	private Map<PickingStates, Integer> getCountOfAllPickingStates() {
-		Map<PickingStates, Integer> countOfPickingStates = new HashMap<PickingStates, Integer>();
+	private Map<PickingStatus, Integer> getCountOfAllPickingStates() {
+		Map<PickingStatus, Integer> countOfPickingStates = new HashMap<PickingStatus, Integer>();
 		List<Picking> listOfPickings = this.pickingStorage.getPickings();
 
-		countOfPickingStates.put(PickingStates.NEW, 0);
-		countOfPickingStates.put(PickingStates.DISPATCHED, 0);
-		countOfPickingStates.put(PickingStates.TAKEN, 0);
+		countOfPickingStates.put(PickingStatus.NEW, 0);
+		countOfPickingStates.put(PickingStatus.DISPATCHED, 0);
+		countOfPickingStates.put(PickingStatus.TAKEN, 0);
 
 		for (Picking p : listOfPickings) {
-			PickingStates state = p.getPickingStates();
+			PickingStatus state = p.getPickingStates();
 			int count = countOfPickingStates.get(state) + 1;
 
 			countOfPickingStates.put(state, count);

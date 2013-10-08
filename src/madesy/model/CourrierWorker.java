@@ -10,11 +10,11 @@ public class CourrierWorker extends BaseWorker {
 
 	@Override
 	public void doWork() {
-		dispatchPicking();
+		dispatechPicking();
 	}
 
-	private void dispatchPicking() {
-		Picking dispatchedPicking = pickingStorage.pickingToDispatch();
+	private void dispatechPicking() {
+		Picking dispatchedPicking = pickingStorage.pickingToDispatch(id);
 		if (dispatchedPicking == null)
 			return;
 		threadToSleep(2000);
@@ -22,7 +22,7 @@ public class CourrierWorker extends BaseWorker {
 	}
 
 	private void takePicking(Picking picking) {
-		pickingStorage.markPickingTaken(picking);
+		pickingStorage.markPickingTaken(picking, id);
 	}
 
 }

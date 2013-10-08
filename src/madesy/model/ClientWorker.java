@@ -25,7 +25,7 @@ public class ClientWorker extends BaseWorker {
 		List<Integer> barcodes = new ArrayList<Integer>();
 		Integer barcode = random.nextInt(100000000);
 		barcodes.add(barcode);
-		Picking picking = new Picking(pickingId, barcodes, PickingStates.NEW,
+		Picking picking = new Picking(pickingId, barcodes, PickingStatus.NEW,
 				this.id);
 
 		return picking;

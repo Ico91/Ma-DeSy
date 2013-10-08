@@ -1,5 +1,5 @@
 package madesy.model;
 
-public enum PickingStates {
+public enum PickingStatus {
 	NEW, DISPATCHED, TAKEN
 }
