@@ -14,29 +14,16 @@ public class Simulation {
 		PickingStorage pickingsStorage = new PickingStorage();
 		ExecutorService pool = Executors.newFixedThreadPool(10);
 		
-		Thread client1 = new Thread(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread client2 = new Thread(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread client3 = new Thread(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread client4 = new Thread(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-	
-		Thread courrier1 = new Thread(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread courrier2 = new Thread(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread courrier3 = new Thread(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread courrier4 = new Thread(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		Thread courrier5 = new Thread(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		
-		Thread manager = new Thread(new ManagerWorker(pickingsStorage));
-		
-		pool.submit(client1);
-		pool.submit(client2);
-		pool.submit(client3);
-		pool.submit(client4);
-		pool.submit(courrier1);
-		pool.submit(courrier2);
-		pool.submit(courrier3);
-		pool.submit(courrier4);
-		pool.submit(courrier5);
-		pool.submit(manager);
+		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
+		pool.submit(new ManagerWorker(pickingsStorage));
 		
 		pool.shutdown();
 	}

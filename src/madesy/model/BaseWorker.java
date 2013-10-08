@@ -29,7 +29,7 @@ public abstract class BaseWorker implements Runnable {
 			Thread.sleep(rand.nextInt(1000) + interval);
 		} catch (InterruptedException e) {
 			System.out.println("Courrier " + this.id + " is interrupted.");
-			return;
+			Thread.currentThread().interrupt();
 		}
 	}
 
