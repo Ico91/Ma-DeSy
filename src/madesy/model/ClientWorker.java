@@ -8,9 +8,11 @@ import java.util.UUID;
 import madesy.storage.PickingStorage;
 
 public class ClientWorker extends BaseWorker {
+	private PickingStorage pickingStorage;
 
 	public ClientWorker(String id, PickingStorage pickingStorage) {
-		super(id, pickingStorage);
+		super(id);
+		this.pickingStorage = pickingStorage;
 	}
 
 	@Override
@@ -30,5 +32,12 @@ public class ClientWorker extends BaseWorker {
 
 		return picking;
 	}
+	
+	public PickingStorage getPickingStorage() {
+		return pickingStorage;
+	}
 
+	public void setPickingStorage(PickingStorage pickingStorage) {
+		this.pickingStorage = pickingStorage;
+	}
 }

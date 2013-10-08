@@ -23,7 +23,7 @@ public class Simulation {
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new ManagerWorker(pickingsStorage));
+		//pool.submit(new ManagerWorker(pickingsStorage));
 		
 		pool.shutdown();
 	}

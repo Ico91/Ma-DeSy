@@ -2,15 +2,11 @@ package madesy.model;
 
 import java.util.Random;
 
-import madesy.storage.PickingStorage;
-
 public abstract class BaseWorker implements Runnable {
 	protected String id;
-	protected PickingStorage pickingStorage;
 	
-	public BaseWorker(String id, PickingStorage pickingStorage) {
+	public BaseWorker(String id) {
 		this.id = id;
-		this.pickingStorage = pickingStorage;
 	}
 	
 	public abstract void  doWork();
@@ -35,8 +31,7 @@ public abstract class BaseWorker implements Runnable {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", pickingStorage="
-				+ pickingStorage + "]";
+		return "Person [id=" + id + "]";
 	}
 
 	@Override
@@ -64,14 +59,6 @@ public abstract class BaseWorker implements Runnable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public PickingStorage getPickingStorage() {
-		return pickingStorage;
-	}
-
-	public void setPickingStorage(PickingStorage pickingStorage) {
-		this.pickingStorage = pickingStorage;
 	}
 	
 }

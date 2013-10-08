@@ -20,6 +20,8 @@ public class EventLog {
 	public String toString() {
 		return "EventLog [eventLog=" + eventLog + "]";
 	}
-	
-	
+
+	public List<Event> getEventLog() {
+		return eventLog;
+	}
 }
