@@ -15,14 +15,14 @@ public abstract class BaseWorker implements Runnable {
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
 			doWork();
-			threadToSleep(1000);
+			threadToSleep();
 		}
 	}
 
-	protected void threadToSleep(long interval) {
+	protected void threadToSleep() {
 		Random rand = new Random();
 		try {
-			Thread.sleep(rand.nextInt(1000) + interval);
+			Thread.sleep(rand.nextInt(3000));
 		} catch (InterruptedException e) {
 			System.out.println("Courrier " + this.id + " is interrupted.");
 			Thread.currentThread().interrupt();

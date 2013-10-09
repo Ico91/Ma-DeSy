@@ -17,7 +17,9 @@ public class ClientWorker extends BaseWorker {
 
 	@Override
 	public void doWork() {
+		threadToSleep();
 		pickingStorage.newPicking(this.makeNewPicking());
+		threadToSleep();
 	}
 
 	private Picking makeNewPicking() {

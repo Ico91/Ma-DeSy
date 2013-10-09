@@ -1,5 +1,7 @@
 package madesy;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,6 +18,8 @@ public class Simulation {
 		PickingStorage pickingsStorage = new PickingStorage(eventLog);
 		ExecutorService pool = Executors.newFixedThreadPool(10);
 		
+		ManagerWorker manager = new ManagerWorker(UUID.randomUUID().toString(), eventLog);
+		
 		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
@@ -26,7 +30,7 @@ public class Simulation {
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
 		//pool.submit(new ManagerWorker(pickingsStorage));
-		pool.submit(new ManagerWorker(UUID.randomUUID().toString(), eventLog));
+		pool.submit(manager);
 		//pool.submit(new SimulationOverseer(eventLog, 5));
 		
 		pool.shutdown();

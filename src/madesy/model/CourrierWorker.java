@@ -19,7 +19,7 @@ public class CourrierWorker extends BaseWorker {
 		Picking dispatchedPicking = pickingStorage.pickingToDispatch(id);
 		if (dispatchedPicking == null)
 			return;
-		threadToSleep(2000);
+		threadToSleep();
 		takePicking(dispatchedPicking);
 	}
 
