@@ -2,6 +2,8 @@ package madesy.model;
 
 import java.util.Date;
 
+import madesy.model.types.EventType;
+
 public class Event {
 	private String eventId;
 	private EventType eventType;

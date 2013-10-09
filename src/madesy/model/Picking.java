@@ -2,6 +2,8 @@ package madesy.model;
 
 import java.util.List;
 
+import madesy.model.types.PickingStatus;
+
 public class Picking {
 	private String id;
 	private List<Integer> barcodes;

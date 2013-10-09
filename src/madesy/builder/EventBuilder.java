@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import madesy.model.Event;
-import madesy.model.EventType;
+import madesy.model.types.EventType;
 
 public class EventBuilder {
 	private EventType eventType;

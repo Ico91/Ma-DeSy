@@ -3,9 +3,9 @@ package madesy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import madesy.model.ClientWorker;
-import madesy.model.CourrierWorker;
-import madesy.model.ManagerWorker;
+import madesy.model.workers.ClientWorker;
+import madesy.model.workers.CourrierWorker;
+import madesy.model.workers.ManagerWorker;
 import madesy.storage.EventLog;
 import madesy.storage.PickingStorage;
 

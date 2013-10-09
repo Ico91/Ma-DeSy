@@ -3,9 +3,9 @@ package madesy;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import madesy.model.BaseWorker;
 import madesy.model.Event;
-import madesy.model.EventType;
+import madesy.model.types.EventType;
+import madesy.model.workers.BaseWorker;
 import madesy.storage.EventLog;
 
 public class SimulationOverseer extends BaseWorker {

@@ -1,10 +1,12 @@
-package madesy.model;
+package madesy.model.workers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import madesy.model.Picking;
+import madesy.model.types.PickingStatus;
 import madesy.storage.PickingStorage;
 
 public class ClientWorker extends BaseWorker {

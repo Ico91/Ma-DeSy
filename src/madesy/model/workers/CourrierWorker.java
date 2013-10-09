@@ -1,5 +1,6 @@
-package madesy.model;
+package madesy.model.workers;
 
+import madesy.model.Picking;
 import madesy.storage.PickingStorage;
 
 public class CourrierWorker extends BaseWorker {

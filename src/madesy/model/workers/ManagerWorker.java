@@ -1,4 +1,4 @@
-package madesy.model;
+package madesy.model.workers;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -9,6 +9,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import madesy.builder.EventBuilder;
+import madesy.model.Event;
+import madesy.model.Report;
+import madesy.model.types.EventType;
+import madesy.model.types.ReportType;
 import madesy.storage.EventLog;
 
 /**

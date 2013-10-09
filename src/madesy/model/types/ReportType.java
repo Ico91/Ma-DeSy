@@ -1,4 +1,4 @@
-package madesy.model;
+package madesy.model.types;
 
 public enum ReportType {
 	ENOUGH_NEW_PICKINGS("The new pickings are dispatched properly."),

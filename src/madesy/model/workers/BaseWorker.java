@@ -1,4 +1,4 @@
-package madesy.model;
+package madesy.model.workers;
 
 import java.util.Random;
 import java.util.UUID;

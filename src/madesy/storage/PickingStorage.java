@@ -7,9 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import madesy.builder.EventBuilder;
 import madesy.model.Event;
-import madesy.model.EventType;
 import madesy.model.Picking;
-import madesy.model.PickingStatus;
+import madesy.model.types.EventType;
+import madesy.model.types.PickingStatus;
 
 public class PickingStorage {
 	private List<Picking> pickings;
