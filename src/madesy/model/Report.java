@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Report {
 	private String id;
-	private List<ReportType> report;
+	private List<String> report;
 	private Map<String, Integer> courrierInfo;
 	private Date fromDate;
 	private Date toDate;
@@ -17,7 +17,7 @@ public class Report {
 		this.id = id;
 		this.fromDate = fromDate;
 		this.toDate = toDate;
-		report = new ArrayList<ReportType>();
+		report = new ArrayList<String>();
 		courrierInfo = new HashMap<String, Integer>();
 	}
 
@@ -28,7 +28,7 @@ public class Report {
 				+ toDate + "]";
 	}
 	
-	public void addReportElement(ReportType element) {
+	public void addReportElement(String element) {
 		this.report.add(element);
 	}
 	
@@ -62,7 +62,7 @@ public class Report {
 		this.id = id;
 	}
 
-	public List<ReportType> getReport() {
+	public List<String> getReport() {
 		return report;
 	}
 

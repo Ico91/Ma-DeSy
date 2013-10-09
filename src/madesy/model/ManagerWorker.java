@@ -50,14 +50,14 @@ public class ManagerWorker extends BaseWorker {
 
 		if (countOfEventType.get(EventType.NEW_PICKING) > 2 * countOfEventType
 				.get(EventType.DISPATCH_PICKING))
-			report.addReportElement(ReportType.TOO_MANY_NEW_PICKINGS);
+			report.addReportElement(ReportType.TOO_MANY_NEW_PICKINGS.getValue());
 		else
-			report.addReportElement(ReportType.NOT_MANY_NEW_PICKINGS);
+			report.addReportElement(ReportType.ENOUGH_NEW_PICKINGS.getValue());
 		if (countOfEventType.get(EventType.DISPATCH_PICKING) > 2 * countOfEventType
 				.get(EventType.TAKE_PICKING))
-			report.addReportElement(ReportType.TOO_MANY_DISPATCHED_PICKINGS);
+			report.addReportElement(ReportType.DISPATCH_DELAYED.getValue());
 		else
-			report.addReportElement(ReportType.NOT_MANY_DISPATCHED_PICKINGS);
+			report.addReportElement(ReportType.DISPATCH_PROPERLY.getValue());
 
 		report.getCourrierInfo().putAll(makeReportForCourriers(events));
 		System.out.println();
