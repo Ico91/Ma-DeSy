@@ -1,6 +1,7 @@
 package madesy.model.workers;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,25 @@ import madesy.storage.EventLog;
 public class ManagerWorker extends BaseWorker {
 	private EventLog eventLog;
 	private Set<String> courriersId;
+	private Date fromDate;
+
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
+
+	private Date toDate;
 
 	public ManagerWorker(EventLog eventLog, int sleepTime) {
 		super(sleepTime);
@@ -34,43 +54,36 @@ public class ManagerWorker extends BaseWorker {
 
 	@Override
 	public void doWork() {
+		System.out.println();
 		System.out.println(eventLog);
-		makeReportForPickings();
-
+		Report report = new Report(UUID.randomUUID().toString(), fromDate,
+				toDate);
+		List<Event> events = eventLog.getEventsFromPeriod(fromDate, toDate);
+		
+		report.getReport().addAll(makeReportForPickings(events));
+		report.getCourrierInfo().putAll(makeReportForCourriers(events));
+		
+		addToEventLog(report);
+		
+		System.out.println(report);
 	}
 
-	private void makeReportForPickings() {
-		Calendar fromDate = Calendar.getInstance();
-		Calendar toDate = Calendar.getInstance();
-		fromDate.set(2013, 9, 9, 0, 0, 0);
-		toDate.set(2013, 9, 10, 0, 0, 0);
-
-		Report report = new Report(UUID.randomUUID().toString(),
-				fromDate.getTime(), toDate.getTime());
-		List<Event> events = eventLog.getEventsFromPeriod(fromDate.getTime(),
-				toDate.getTime());
-
+	private List<String> makeReportForPickings(List<Event> events) {
+		List<String> reportList = new ArrayList<String>();
 		Map<EventType, Integer> countOfEventType = countEvents(events);
 
 		if (countOfEventType.get(EventType.NEW_PICKING) > 2 * countOfEventType
 				.get(EventType.DISPATCH_PICKING))
-			report.addReportElement(ReportType.TOO_MANY_NEW_PICKINGS.getValue());
+			reportList.add(ReportType.TOO_MANY_NEW_PICKINGS.getValue());
 		else
-			report.addReportElement(ReportType.ENOUGH_NEW_PICKINGS.getValue());
+			reportList.add(ReportType.ENOUGH_NEW_PICKINGS.getValue());
 		if (countOfEventType.get(EventType.DISPATCH_PICKING) > 2 * countOfEventType
 				.get(EventType.TAKE_PICKING))
-			report.addReportElement(ReportType.DISPATCH_DELAYED.getValue());
+			reportList.add(ReportType.DISPATCH_DELAYED.getValue());
 		else
-			report.addReportElement(ReportType.DISPATCH_PROPERLY.getValue());
-
-		report.getCourrierInfo().putAll(makeReportForCourriers(events));
-		System.out.println();
-		System.out.println(report);
-
-		Event managerEvent = new EventBuilder()
-				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
-				.build();
-		eventLog.addEvent(managerEvent);
+			reportList.add(ReportType.DISPATCH_PROPERLY.getValue());
+		
+		return reportList;
 
 	}
 
@@ -92,6 +105,13 @@ public class ManagerWorker extends BaseWorker {
 		}
 
 		return countCourrierPickings;
+	}
+	
+	private void addToEventLog(Report report) {
+		Event managerEvent = new EventBuilder()
+				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
+				.build();
+		eventLog.addEvent(managerEvent);
 	}
 
 	private Map<EventType, Integer> countEvents(List<Event> events) {
