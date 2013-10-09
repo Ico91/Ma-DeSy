@@ -1,12 +1,15 @@
 package madesy.model;
 
 import java.util.Random;
+import java.util.UUID;
 
 public abstract class BaseWorker implements Runnable {
 	protected String id;
+	protected int sleepTime;
 	
-	public BaseWorker(String id) {
-		this.id = id;
+	public BaseWorker(int sleepTime) {
+		this.id = UUID.randomUUID().toString();
+		this.sleepTime = sleepTime;
 	}
 	
 	public abstract void  doWork();
@@ -15,16 +18,15 @@ public abstract class BaseWorker implements Runnable {
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
 			doWork();
-			threadToSleep(1000);
+			threadToSleep();
 		}
 	}
 
-	protected void threadToSleep(long interval) {
+	protected void threadToSleep() {
 		Random rand = new Random();
 		try {
-			Thread.sleep(rand.nextInt(1000) + interval);
+			Thread.sleep(rand.nextInt(1000) + sleepTime);
 		} catch (InterruptedException e) {
-			System.out.println("Courrier " + this.id + " is interrupted.");
 			Thread.currentThread().interrupt();
 		}
 	}

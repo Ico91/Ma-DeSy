@@ -13,8 +13,8 @@ public class SimulationOverseer extends BaseWorker {
 	private int terminationCount;
 	private ExecutorService service;
 
-	public SimulationOverseer(String id, EventLog eventLog, int terminationCount, ExecutorService service) {
-		super(id);
+	public SimulationOverseer(ExecutorService service, EventLog eventLog, int terminationCount, int sleepTime) {
+		super(sleepTime);
 		this.eventLog = eventLog;
 		this.terminationCount = terminationCount;
 		this.service = service;
@@ -39,7 +39,10 @@ public class SimulationOverseer extends BaseWorker {
 	@Override
 	public void doWork() {
 		if(checkForTermination())
+		{
 			service.shutdownNow();
+			System.out.println("Terminated.");
+		}
 	}
 	
 

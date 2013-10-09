@@ -5,8 +5,8 @@ import madesy.storage.PickingStorage;
 public class CourrierWorker extends BaseWorker {
 	private PickingStorage pickingStorage;
 
-	public CourrierWorker(String id, PickingStorage pickingStorage) {
-		super(id);
+	public CourrierWorker(PickingStorage pickingStorage, int sleepTime) {
+		super(sleepTime);
 		this.pickingStorage = pickingStorage;
 	}
 
@@ -19,7 +19,7 @@ public class CourrierWorker extends BaseWorker {
 		Picking dispatchedPicking = pickingStorage.pickingToDispatch(id);
 		if (dispatchedPicking == null)
 			return;
-		threadToSleep(2000);
+		threadToSleep();
 		takePicking(dispatchedPicking);
 	}
 

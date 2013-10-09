@@ -16,19 +16,20 @@ public class Simulation {
 		PickingStorage pickingsStorage = new PickingStorage(eventLog);
 		ExecutorService pool = Executors.newFixedThreadPool(11);
 		
-		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
-		//pool.submit(new ManagerWorker(pickingsStorage));
-		pool.submit(new ManagerWorker(UUID.randomUUID().toString(), eventLog));
+		ManagerWorker manager = new ManagerWorker(eventLog, 5000);
 		
-		pool.submit(new SimulationOverseer(UUID.randomUUID().toString(), eventLog, 5, pool));
+		pool.submit(new ClientWorker(pickingsStorage, 1000));
+		pool.submit(new ClientWorker(pickingsStorage, 1500));
+		pool.submit(new ClientWorker(pickingsStorage, 2000));
+		pool.submit(new ClientWorker(pickingsStorage, 2500));
+		pool.submit(new CourrierWorker(pickingsStorage, 3000));
+		pool.submit(new CourrierWorker(pickingsStorage, 2500));
+		pool.submit(new CourrierWorker(pickingsStorage, 2000));
+		pool.submit(new CourrierWorker(pickingsStorage, 1500));
+		pool.submit(new CourrierWorker(pickingsStorage, 1000));
+
+		pool.submit(manager);
+		pool.submit(new SimulationOverseer(pool, eventLog, 5, 5000));
 		
 	}
 }

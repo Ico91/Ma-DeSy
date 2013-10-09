@@ -10,14 +10,16 @@ import madesy.storage.PickingStorage;
 public class ClientWorker extends BaseWorker {
 	private PickingStorage pickingStorage;
 
-	public ClientWorker(String id, PickingStorage pickingStorage) {
-		super(id);
+	public ClientWorker(PickingStorage pickingStorage, int sleepTime) {
+		super(sleepTime);
 		this.pickingStorage = pickingStorage;
 	}
 
 	@Override
 	public void doWork() {
+		threadToSleep();
 		pickingStorage.newPicking(this.makeNewPicking());
+		threadToSleep();
 	}
 
 	private Picking makeNewPicking() {
