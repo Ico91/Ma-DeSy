@@ -14,7 +14,7 @@ public class Simulation {
 	public static void main(String[] args) {
 		EventLog eventLog = new EventLog();
 		PickingStorage pickingsStorage = new PickingStorage(eventLog);
-		ExecutorService pool = Executors.newFixedThreadPool(10);
+		ExecutorService pool = Executors.newFixedThreadPool(11);
 		
 		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
 		pool.submit(new ClientWorker(UUID.randomUUID().toString(), pickingsStorage));
@@ -27,8 +27,8 @@ public class Simulation {
 		pool.submit(new CourrierWorker(UUID.randomUUID().toString(), pickingsStorage));
 		//pool.submit(new ManagerWorker(pickingsStorage));
 		pool.submit(new ManagerWorker(UUID.randomUUID().toString(), eventLog));
-		//pool.submit(new SimulationOverseer(eventLog, 5));
 		
-		pool.shutdown();
+		pool.submit(new SimulationOverseer(UUID.randomUUID().toString(), eventLog, 5, pool));
+		
 	}
 }
