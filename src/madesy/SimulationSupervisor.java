@@ -1,6 +1,5 @@
 package madesy;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import madesy.model.Event;
@@ -8,30 +7,38 @@ import madesy.model.types.EventType;
 import madesy.model.workers.BaseWorker;
 import madesy.storage.EventLog;
 
-public class SimulationOverseer extends BaseWorker {
+/**
+ * Manages the simulation process, based on the manager reports
+ * @author hristo
+ *
+ */
+public class SimulationSupervisor extends BaseWorker {
 	private EventLog eventLog;
 	private int terminationCount;
 	private ExecutorService service;
 
-	public SimulationOverseer(ExecutorService service, EventLog eventLog, int terminationCount, int sleepTime) {
+	public SimulationSupervisor(ExecutorService service, EventLog eventLog, int terminationCount, int sleepTime) {
 		super(sleepTime);
 		this.eventLog = eventLog;
 		this.terminationCount = terminationCount;
 		this.service = service;
 	}
 
+	/**
+	 * Checks whether the number of manager reports is more than
+	 * the specified count in order to terminate the thread pool.
+	 * @return
+	 */
 	private boolean checkForTermination() {
-		List<Event> eventsList = eventLog.getEventLog();
 		int count = 0;
-		for(Event e : eventsList) {
+		for(Event e : eventLog.getEventLog()) {
 			if(e.getEventType() == EventType.MANAGER_REPORT) {
 				count++;
 			}
 		}
 		
-		if (count >= terminationCount) {
+		if (count >= terminationCount)
 			return true;
-		}
 
 		return false;
 	}

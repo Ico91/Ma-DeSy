@@ -28,7 +28,7 @@ public class Simulation {
 		pool.submit(new CourrierWorker(pickingsStorage, 1000));
 
 		pool.submit(manager);
-		pool.submit(new SimulationOverseer(pool, eventLog, 5, 5000));
+		pool.submit(new SimulationSupervisor(pool, eventLog, 15, 5000));
 		
 	}
 }

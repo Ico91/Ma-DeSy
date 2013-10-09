@@ -9,6 +9,11 @@ import madesy.model.Picking;
 import madesy.model.types.PickingStatus;
 import madesy.storage.PickingStorage;
 
+/**
+ * Worker process used to simulate a client, requesting
+ * to send a new picking.
+ *
+ */
 public class ClientWorker extends BaseWorker {
 	private PickingStorage pickingStorage;
 
@@ -24,6 +29,10 @@ public class ClientWorker extends BaseWorker {
 		threadToSleep();
 	}
 
+	/**
+	 * Creates a random new picking.
+	 * @return
+	 */
 	private Picking makeNewPicking() {
 		String pickingId = UUID.randomUUID().toString();
 		Random random = new Random();

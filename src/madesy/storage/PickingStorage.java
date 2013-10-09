@@ -11,6 +11,13 @@ import madesy.model.Picking;
 import madesy.model.types.EventType;
 import madesy.model.types.PickingStatus;
 
+/**
+ * Container for all pickings of all clients, providing
+ * the necessary concurrent methods on it, for adding
+ * a new picking and changing the status of a specified
+ * one.
+ *
+ */
 public class PickingStorage {
 	private List<Picking> pickings;
 	private EventLog eventLog;
@@ -24,6 +31,10 @@ public class PickingStorage {
 		lock = new ReentrantLock();
 	}
 	
+	/**
+	 * Adds the newly created picking in the collection,
+	 * @param picking
+	 */
 	public void newPicking(Picking picking) {
 		lock.lock();
 		try {
@@ -35,6 +46,13 @@ public class PickingStorage {
 		}
 	}
 	
+	/**
+	 * Returns the first available picking marked as NEW
+	 * in order to be dispatched.
+	 * @param courrierId - Id of the courier, requesting
+	 * to dispatch a picking.
+	 * @return If any exists, returns the first new picking.
+	 */
 	public Picking pickingToDispatch(String courrierId) {
 		Picking picking = null;
 		lock.lock();
@@ -57,6 +75,12 @@ public class PickingStorage {
 		return picking;
 	}
 	
+	/**
+	 * Changes the status of a picking, which previously was
+	 * marked as dispatched, to taken.
+	 * @param picking - The picking which was delivered.
+	 * @param courrierId - Id of the courier who delivered the picking.
+	 */
 	public void markPickingTaken(Picking picking, String courrierId) {
 		lock.lock();
 		try {
@@ -70,6 +94,12 @@ public class PickingStorage {
 		}
 	}
 
+	/**
+	 * Generates meta data for the event log.
+	 * @param pickingId - Id of the picking being delivered
+	 * @param courrierId - Id of the courier 
+	 * @return 
+	 */
 	private String generateMetaData(String pickingId, String courrierId) {
 		String metaData = pickingId + "," + courrierId;
 		return metaData;

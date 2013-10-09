@@ -4,6 +4,10 @@ import java.util.Date;
 
 import madesy.model.types.EventType;
 
+/**
+ * Contains information describing each event
+ * 
+ */
 public class Event {
 	private String eventId;
 	private EventType eventType;
