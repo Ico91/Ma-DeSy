@@ -58,7 +58,7 @@ public class ManagerWorker extends BaseWorker {
 		System.out.println(eventLog);
 		Report report = new Report(UUID.randomUUID().toString(), fromDate,
 				toDate);
-		List<Event> events = eventLog.getEventsFromPeriod(fromDate, toDate);
+		List<Event> events = eventLog.getEvents(fromDate, toDate);
 		
 		report.getReport().addAll(makeReportForPickings(events));
 		report.getCourrierInfo().putAll(makeReportForCourriers(events));
@@ -128,7 +128,7 @@ public class ManagerWorker extends BaseWorker {
 		Event managerEvent = new EventBuilder()
 				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
 				.build();
-		eventLog.addEvent(managerEvent);
+		eventLog.add(managerEvent);
 	}
 
 	/**

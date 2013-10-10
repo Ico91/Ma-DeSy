@@ -31,22 +31,19 @@ public class SimulationSupervisor extends BaseWorker {
 	 */
 	private boolean checkForTermination() {
 		int count = 0;
-		for(Event e : eventLog.getEventLog()) {
+		for(Event e : eventLog.getEvents()) {
 			if(e.getEventType() == EventType.MANAGER_REPORT) {
 				count++;
 			}
 		}
 		
-		if (count >= terminationCount)
-			return true;
+		return count >= terminationCount;
 
-		return false;
 	}
 
 	@Override
 	public void doWork() {
-		if(checkForTermination())
-		{
+		if(checkForTermination()) {
 			service.shutdownNow();
 			System.out.println("Terminated.");
 		}

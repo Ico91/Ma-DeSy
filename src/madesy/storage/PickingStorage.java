@@ -40,7 +40,7 @@ public class PickingStorage {
 		try {
 			pickings.add(picking);
 			Event newEvent = eventBuilder.addEvent(EventType.NEW_PICKING).addMetaData(picking.getId()).build();
-			eventLog.addEvent(newEvent);
+			eventLog.add(newEvent);
 		} finally {
 			lock.unlock();
 		}
@@ -64,7 +64,7 @@ public class PickingStorage {
 					picking = pickings.get(i);
 					String metaData = generateMetaData(picking.getId(), courrierId);
 					Event newEvent = eventBuilder.addEvent(EventType.DISPATCH_PICKING).addMetaData(metaData).build();
-					eventLog.addEvent(newEvent);
+					eventLog.add(newEvent);
 					break;
 				}
 			}
@@ -88,7 +88,7 @@ public class PickingStorage {
 			pickings.get(index).setPickingStates(PickingStatus.TAKEN);
 			String metaData = generateMetaData(picking.getId(), courrierId);
 			Event newEvent = eventBuilder.addEvent(EventType.TAKE_PICKING).addMetaData(metaData).build();
-			eventLog.addEvent(newEvent);
+			eventLog.add(newEvent);
 		} finally {
 			lock.unlock();
 		}
