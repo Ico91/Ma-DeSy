@@ -30,7 +30,7 @@ public class PickingStorage {
 	 * @param picking
 	 */
 	public void newPicking(final Picking picking) {
-		new シンクロナイザー<Void>() {
+		new Synchronizator<Void>() {
 
 			@Override
 			Void execute() {
@@ -49,7 +49,7 @@ public class PickingStorage {
 	 * @return If any exists, returns the first new picking.
 	 */
 	public Picking pickingToDispatch(final String courrierId) {
-		return new シンクロナイザー<Picking>() {
+		return new Synchronizator<Picking>() {
 
 			@Override
 			Picking execute() {
@@ -74,7 +74,7 @@ public class PickingStorage {
 	 * @param courrierId - Id of the courier who delivered the picking.
 	 */
 	public void markPickingTaken(final Picking picking, final String courrierId) {
-		new シンクロナイザー<Void>() {
+		new Synchronizator<Void>() {
 
 			@Override
 			Void execute() {
@@ -90,7 +90,7 @@ public class PickingStorage {
 		return pickings;
 	}
 	
-	private abstract class シンクロナイザー<T> {
+	private abstract class Synchronizator<T> {
 		abstract T execute();
 		
 		T executeWithLock() {
