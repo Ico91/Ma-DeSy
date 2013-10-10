@@ -3,15 +3,13 @@ package madesy.model.workers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import madesy.model.Event;
+import madesy.EventLogAnalyzer;
 import madesy.model.Events;
 import madesy.model.Report;
-import madesy.model.types.EventType;
 import madesy.model.types.ReportType;
 import madesy.storage.EventLog;
 
@@ -24,14 +22,15 @@ import madesy.storage.EventLog;
  */
 public class ManagerWorker extends BaseWorker {
 	private EventLog eventLog;
-	private Set<String> courriersId = new HashSet<String>();
 	private Date fromDate;
 	private Date toDate;
+	private EventLogAnalyzer analyzer;
 
 	public ManagerWorker(EventLog eventLog, int sleepTime) {
 		super(sleepTime);
 		this.eventLog = eventLog;
 		fromDate = new Date();
+		analyzer = new EventLogAnalyzer(eventLog, fromDate, toDate);
 	}
 
 	@Override
@@ -41,102 +40,48 @@ public class ManagerWorker extends BaseWorker {
 		System.out.println(eventLog);
 		Report report = new Report(fromDate,
 				toDate);
-		List<Event> events = eventLog.getEvents(fromDate, toDate);
-		
-		report.getPickingsReport().addAll(makeReportForPickings(events));
-		report.getCourrierPickings().putAll(makeReportForCourriers(events));
+		analyzer.setFromDate(fromDate);
+		analyzer.setToDate(toDate);
+		report.getPickingsReport().addAll(makeReportForPickings());
+		report.getCourrierPickings().putAll(makeReportForCourriers());
 		
 		addToEventLog(report);
 		
 		System.out.println(report);
 		fromDate = toDate;
 	}
-	
-	/**
-	 * Determines the number of pickings in each state
-	 * @param events
-	 * @return Map, where key is each state of the pickings,
-	 * and value - their number.
-	 */
-	public Map<EventType, Integer> countEvents(List<Event> events) {
-		Map<EventType, Integer> countOfEventType = new HashMap<EventType, Integer>();
-
-		countOfEventType.put(EventType.NEW_PICKING, 0);
-		countOfEventType.put(EventType.DISPATCH_PICKING, 0);
-		countOfEventType.put(EventType.TAKE_PICKING, 0);
-
-		for (Event e : events) {
-			EventType state = e.getEventType();
-			if (state == EventType.NEW_PICKING
-					|| state == EventType.DISPATCH_PICKING
-					|| state == EventType.TAKE_PICKING) {
-				int count = countOfEventType.get(state) + 1;
-				countOfEventType.put(state, count);
-
-				if (state != EventType.NEW_PICKING) {
-					String data = analizeMetaData(e.getMetaData())[1];
-					courriersId.add(data);
-				}
-
-			}
-		}
-		return countOfEventType;
-	}
-	
-
-	private String[] analizeMetaData(String metaData) {
-		String[] data = metaData.split(",");
-
-		return data;
-	}
 
 	/**
 	 * Generates a report based on the status of the pickings.
 	 * 
-	 * @param events
-	 * @return 
+	 * @return List of {@link ReportType}
 	 */
-	private List<String> makeReportForPickings(List<Event> events) {
-		List<String> reportList = new ArrayList<String>();
-		Map<EventType, Integer> countOfEventType = countEvents(events);
-
-		if (countOfEventType.get(EventType.NEW_PICKING) > 2 * countOfEventType
-				.get(EventType.DISPATCH_PICKING))
-			reportList.add(ReportType.TOO_MANY_NEW_PICKINGS.getValue());
+	private List<ReportType> makeReportForPickings() {
+		List<ReportType> reportList = new ArrayList<ReportType>();
+		if(analyzer.compareNewToDispatched())
+			reportList.add(ReportType.TOO_MANY_NEW_PICKINGS);
 		else
-			reportList.add(ReportType.ENOUGH_NEW_PICKINGS.getValue());
-		if (countOfEventType.get(EventType.DISPATCH_PICKING) > 2 * countOfEventType
-				.get(EventType.TAKE_PICKING))
-			reportList.add(ReportType.DISPATCH_DELAYED.getValue());
+			reportList.add(ReportType.ENOUGH_NEW_PICKINGS);
+			
+		if(analyzer.compareDispatchedToTaken())
+			reportList.add(ReportType.DISPATCH_DELAYED);
 		else
-			reportList.add(ReportType.DISPATCH_PROPERLY.getValue());
-		
-		return reportList;
+			reportList.add(ReportType.DISPATCH_PROPERLY);
 
-	}
+		return reportList;		
+}
 
 	/**
 	 * Generates report consisting of information based on the
 	 * work done by the couriers.
-	 * @param events
 	 * @return Map, where key is the id of each courier and value
 	 * the number of pickings delivered.
 	 */
-	private Map<String, Integer> makeReportForCourriers(List<Event> events) {
+	private Map<String, Integer> makeReportForCourriers() {
 		Map<String, Integer> countCourrierPickings = new HashMap<String, Integer>();
-		for (String id : courriersId) {
-			countCourrierPickings.put(id, 0);
-		}
-
-		for (Event e : events) {
-			if (e.getEventType() == EventType.TAKE_PICKING) {
-				for (String id : countCourrierPickings.keySet()) {
-					if (analizeMetaData(e.getMetaData())[1].equals(id)) {
-						int count = countCourrierPickings.get(id) + 1;
-						countCourrierPickings.put(id, count);
-					}
-				}
-			}
+		Set<String> courierIds = eventLog.getCouriersId();
+		for(String id : courierIds) {
+			countCourrierPickings.put(id, analyzer.getTakenPickings(id));
 		}
 
 		return countCourrierPickings;

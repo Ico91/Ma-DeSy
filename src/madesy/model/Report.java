@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import madesy.model.types.ReportType;
+
 public class Report {
 	private String id;
-	private List<String> pickingsReport = new ArrayList<String>();
+	private List<ReportType> pickingsReport = new ArrayList<ReportType>();
 	private Map<String, Integer> courrierPickings = new HashMap<String, Integer>();
 	private Date fromDate;
 	private Date toDate;
@@ -27,7 +29,7 @@ public class Report {
 				+ toDate + "]";
 	}
 	
-	public void add(String element) {
+	public void add(ReportType element) {
 		this.pickingsReport.add(element);
 	}
 	
@@ -57,7 +59,7 @@ public class Report {
 		return id;
 	}
 
-	public List<String> getPickingsReport() {
+	public List<ReportType> getPickingsReport() {
 		return pickingsReport;
 	}
 
