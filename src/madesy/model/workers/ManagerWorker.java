@@ -68,6 +68,12 @@ public class ManagerWorker extends BaseWorker {
 		System.out.println(report);
 	}
 
+	/**
+	 * Generates a report based on the status of the pickings.
+	 * 
+	 * @param events
+	 * @return 
+	 */
 	private List<String> makeReportForPickings(List<Event> events) {
 		List<String> reportList = new ArrayList<String>();
 		Map<EventType, Integer> countOfEventType = countEvents(events);
@@ -87,6 +93,13 @@ public class ManagerWorker extends BaseWorker {
 
 	}
 
+	/**
+	 * Generates report consisting of information based on the
+	 * work done by the couriers.
+	 * @param events
+	 * @return Map, where key is the id of each courier and value
+	 * the number of pickings delivered.
+	 */
 	private Map<String, Integer> makeReportForCourriers(List<Event> events) {
 		Map<String, Integer> countCourrierPickings = new HashMap<String, Integer>();
 		for (String id : courriersId) {
@@ -107,6 +120,10 @@ public class ManagerWorker extends BaseWorker {
 		return countCourrierPickings;
 	}
 	
+	/**
+	 * Adds the report creation event to the event log.
+	 * @param report
+	 */
 	private void addToEventLog(Report report) {
 		Event managerEvent = new EventBuilder()
 				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
@@ -114,6 +131,12 @@ public class ManagerWorker extends BaseWorker {
 		eventLog.addEvent(managerEvent);
 	}
 
+	/**
+	 * Determines the number of pickings in each state
+	 * @param events
+	 * @return Map, where key is each state of the pickings,
+	 * and value - their number.
+	 */
 	private Map<EventType, Integer> countEvents(List<Event> events) {
 		Map<EventType, Integer> countOfEventType = new HashMap<EventType, Integer>();
 
