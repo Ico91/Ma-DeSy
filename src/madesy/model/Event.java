@@ -1,6 +1,7 @@
 package madesy.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import madesy.model.types.EventType;
 
@@ -9,28 +10,36 @@ import madesy.model.types.EventType;
  * 
  */
 public class Event {
-	private String eventId;
+	private String eventId = UUID.randomUUID().toString();
+	private Date date = new Date();
+	private String metaData = "";
 	private EventType eventType;
-	private Date date;
-	private String metaData;
 	
-	public Event() {
-		
+	public Event(EventType eventType) {
+		this.eventType = eventType;
 	}
 	
-	public Event(String eventId, EventType eventType, Date date, String metaData) {
-		this.eventId = eventId;
-		this.eventType = eventType;
-		this.date = date;
+	public Event(EventType eventType, String metaData) {
+		this(eventType);
 		this.metaData = metaData;
 	}
 
-	@Override
-	public String toString() {
-		return "Event [eventId=" + eventId + ", eventType=" + eventType + ", date="
-				+ date + ", metaData=" + metaData + "]";
+	public String getEventId() {
+		return eventId;
 	}
 
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public String getMetaData() {
+		return metaData;
+	}
+	
 	@Override
 	public int hashCode() {
 		return eventId.hashCode();
@@ -49,37 +58,10 @@ public class Event {
 			return false;
 		return true;
 	}
-
-	public String getEventId() {
-		return eventId;
-	}
-
-	public void setEventId(String eventId) {
-		this.eventId = eventId;
-	}
-
-	public EventType getEventType() {
-		return eventType;
-	}
-
-	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public String getMetaData() {
-		return metaData;
-	}
-
-	public void setMetaData(String metaData) {
-		this.metaData = metaData;
-	}	
 	
+	@Override
+	public String toString() {
+		return "Event [eventId=" + eventId + ", eventType=" + eventType + ", date="
+				+ date + ", metaData=" + metaData + "]";
+	}
 }

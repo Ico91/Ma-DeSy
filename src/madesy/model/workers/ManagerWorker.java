@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import madesy.builder.EventBuilder;
 import madesy.model.Event;
+import madesy.model.Events;
 import madesy.model.Report;
 import madesy.model.types.EventType;
 import madesy.model.types.ReportType;
@@ -147,10 +147,7 @@ public class ManagerWorker extends BaseWorker {
 	 * @param report
 	 */
 	private void addToEventLog(Report report) {
-		Event managerEvent = new EventBuilder()
-				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
-				.build();
-		eventLog.add(managerEvent);
+		eventLog.add(Events.managerReport(report.getId()));
 	}
 
 }
