@@ -44,12 +44,13 @@ public class EventLog {
 		return eventsForPeriod;
 	}
 	
-	public List<Event> getEvents() {
-		return eventLog;
-	}
-	
 	@Override
 	public String toString() {
 		return "EventLog [eventLog=" + eventLog + "]";
 	}
+	
+	public List<Event> getEvents() {
+		return eventLog;
+	}
+
 }

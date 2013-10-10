@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import madesy.builder.EventBuilder;
-import madesy.model.Event;
+import madesy.model.Events;
 import madesy.model.Picking;
-import madesy.model.types.EventType;
 import madesy.model.types.PickingStatus;
 
 /**
@@ -19,31 +17,28 @@ import madesy.model.types.PickingStatus;
  *
  */
 public class PickingStorage {
-	private List<Picking> pickings;
+	private List<Picking> pickings = new ArrayList<Picking>();
 	private EventLog eventLog;
-	private EventBuilder eventBuilder;
-	private final Lock lock;
+	private final Lock lock = new ReentrantLock();
 	
 	public PickingStorage(EventLog eventLog) {
-		pickings = new ArrayList<Picking>();
 		this.eventLog = eventLog;
-		eventBuilder = new EventBuilder();
-		lock = new ReentrantLock();
 	}
 	
 	/**
 	 * Adds the newly created picking in the collection,
 	 * @param picking
 	 */
-	public void newPicking(Picking picking) {
-		lock.lock();
-		try {
-			pickings.add(picking);
-			Event newEvent = eventBuilder.addEvent(EventType.NEW_PICKING).addMetaData(picking.getId()).build();
-			eventLog.add(newEvent);
-		} finally {
-			lock.unlock();
-		}
+	public void newPicking(final Picking picking) {
+		new Synchronizator<Void>() {
+
+			@Override
+			Void execute() {
+				pickings.add(picking);
+				eventLog.add(Events.newPicking(picking.getId()));
+				return null;
+			}
+		}.executeWithLock();
 	}
 	
 	/**
@@ -53,26 +48,23 @@ public class PickingStorage {
 	 * to dispatch a picking.
 	 * @return If any exists, returns the first new picking.
 	 */
-	public Picking pickingToDispatch(String courrierId) {
-		Picking picking = null;
-		lock.lock();
-		try {
-			for(int i = 0; i < pickings.size(); i ++) {
-				// get index of first picking marked as new
-				if(pickings.get(i).getPickingStates() == PickingStatus.NEW) {
-					pickings.get(i).setPickingStates(PickingStatus.DISPATCHED);
-					picking = pickings.get(i);
-					String metaData = generateMetaData(picking.getId(), courrierId);
-					Event newEvent = eventBuilder.addEvent(EventType.DISPATCH_PICKING).addMetaData(metaData).build();
-					eventLog.add(newEvent);
-					break;
+	public Picking pickingToDispatch(final String courrierId) {
+		return new Synchronizator<Picking>() {
+
+			@Override
+			Picking execute() {
+				for(int i = 0; i < pickings.size(); i ++) {
+					// get index of first picking marked as new
+					if(pickings.get(i).getPickingStates() == PickingStatus.NEW) {
+						pickings.get(i).setPickingStates(PickingStatus.DISPATCHED);
+						eventLog.add(Events.dispachedPicking(pickings.get(i).getId(), courrierId));
+						return pickings.get(i);
+					}
 				}
+				
+				return null;
 			}
-		} finally {
-			lock.unlock();
-		}
-		
-		return picking;
+		}.executeWithLock();
 	}
 	
 	/**
@@ -81,32 +73,33 @@ public class PickingStorage {
 	 * @param picking - The picking which was delivered.
 	 * @param courrierId - Id of the courier who delivered the picking.
 	 */
-	public void markPickingTaken(Picking picking, String courrierId) {
-		lock.lock();
-		try {
-			int index = pickings.indexOf(picking);
-			pickings.get(index).setPickingStates(PickingStatus.TAKEN);
-			String metaData = generateMetaData(picking.getId(), courrierId);
-			Event newEvent = eventBuilder.addEvent(EventType.TAKE_PICKING).addMetaData(metaData).build();
-			eventLog.add(newEvent);
-		} finally {
-			lock.unlock();
-		}
-	}
+	public void markPickingTaken(final Picking picking, final String courrierId) {
+		new Synchronizator<Void>() {
 
-	/**
-	 * Generates meta data for the event log.
-	 * @param pickingId - Id of the picking being delivered
-	 * @param courrierId - Id of the courier 
-	 * @return 
-	 */
-	private String generateMetaData(String pickingId, String courrierId) {
-		String metaData = pickingId + "," + courrierId;
-		return metaData;
+			@Override
+			Void execute() {
+				int index = pickings.indexOf(picking);
+				pickings.get(index).setPickingStates(PickingStatus.TAKEN);
+				eventLog.add(Events.takenPicking(picking.getId(), courrierId));
+				return null;
+			}
+		}.executeWithLock();
 	}
 
 	public List<Picking> getPickings() {
 		return pickings;
 	}
 	
+	private abstract class Synchronizator<T> {
+		abstract T execute();
+		
+		T executeWithLock() {
+			lock.lock();
+			try {
+				return execute();
+			} finally {
+				lock.unlock();
+			}
+		}
+	}
 }

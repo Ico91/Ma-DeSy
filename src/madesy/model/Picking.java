@@ -1,19 +1,20 @@
 package madesy.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import madesy.model.types.PickingStatus;
 
 public class Picking {
 	private String id;
-	private List<Integer> barcodes;
+	private List<Integer> barcodes = new ArrayList<Integer>();
 	private PickingStatus pickingStatus;
 	private String senderId;
 	
-	public Picking(String id, List<Integer> barcodes, PickingStatus pickingStatus, String senderId) {
-		this.id = id;
-		this.barcodes = barcodes;
-		this.pickingStatus = pickingStatus;
+	public Picking(String senderId) {
+		this.id = UUID.randomUUID().toString();
+		this.pickingStatus = PickingStatus.NEW;
 		this.senderId = senderId;
 	}
 	
@@ -46,27 +47,29 @@ public class Picking {
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 	public List<Integer> getBarcodes() {
 		return barcodes;
 	}
+	
 	public void setBarcodes(List<Integer> barcodes) {
 		this.barcodes = barcodes;
 	}
+	
 	public PickingStatus getPickingStates() {
 		return pickingStatus;
 	}
+	
 	public void setPickingStates(PickingStatus pickingStatus) {
 		this.pickingStatus = pickingStatus;
 	}
-	public String getClientId() {
+	
+	public String getSenderId() {
 		return senderId;
 	}
-	public void setClientId(String senderId) {
+	
+	public void setSenderId(String senderId) {
 		this.senderId = senderId;
 	}
-	
 	
 }

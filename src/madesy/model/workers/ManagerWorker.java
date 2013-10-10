@@ -7,10 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
-import madesy.builder.EventBuilder;
 import madesy.model.Event;
+import madesy.model.Events;
 import madesy.model.Report;
 import madesy.model.types.EventType;
 import madesy.model.types.ReportType;
@@ -25,47 +24,70 @@ import madesy.storage.EventLog;
  */
 public class ManagerWorker extends BaseWorker {
 	private EventLog eventLog;
-	private Set<String> courriersId;
+	private Set<String> courriersId = new HashSet<String>();
 	private Date fromDate;
-
-	public Date getFromDate() {
-		return fromDate;
-	}
-
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
-
-	public Date getToDate() {
-		return toDate;
-	}
-
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
-	}
-
 	private Date toDate;
 
 	public ManagerWorker(EventLog eventLog, int sleepTime) {
 		super(sleepTime);
 		this.eventLog = eventLog;
-		courriersId = new HashSet<String>();
+		fromDate = new Date();
 	}
 
 	@Override
 	public void doWork() {
+		toDate = new Date();
 		System.out.println();
 		System.out.println(eventLog);
-		Report report = new Report(UUID.randomUUID().toString(), fromDate,
+		Report report = new Report(fromDate,
 				toDate);
 		List<Event> events = eventLog.getEvents(fromDate, toDate);
 		
-		report.getReport().addAll(makeReportForPickings(events));
-		report.getCourrierInfo().putAll(makeReportForCourriers(events));
+		report.getPickingsReport().addAll(makeReportForPickings(events));
+		report.getCourrierPickings().putAll(makeReportForCourriers(events));
 		
 		addToEventLog(report);
 		
 		System.out.println(report);
+		fromDate = toDate;
+	}
+	
+	/**
+	 * Determines the number of pickings in each state
+	 * @param events
+	 * @return Map, where key is each state of the pickings,
+	 * and value - their number.
+	 */
+	public Map<EventType, Integer> countEvents(List<Event> events) {
+		Map<EventType, Integer> countOfEventType = new HashMap<EventType, Integer>();
+
+		countOfEventType.put(EventType.NEW_PICKING, 0);
+		countOfEventType.put(EventType.DISPATCH_PICKING, 0);
+		countOfEventType.put(EventType.TAKE_PICKING, 0);
+
+		for (Event e : events) {
+			EventType state = e.getEventType();
+			if (state == EventType.NEW_PICKING
+					|| state == EventType.DISPATCH_PICKING
+					|| state == EventType.TAKE_PICKING) {
+				int count = countOfEventType.get(state) + 1;
+				countOfEventType.put(state, count);
+
+				if (state != EventType.NEW_PICKING) {
+					String data = analizeMetaData(e.getMetaData())[1];
+					courriersId.add(data);
+				}
+
+			}
+		}
+		return countOfEventType;
+	}
+	
+
+	private String[] analizeMetaData(String metaData) {
+		String[] data = metaData.split(",");
+
+		return data;
 	}
 
 	/**
@@ -125,47 +147,7 @@ public class ManagerWorker extends BaseWorker {
 	 * @param report
 	 */
 	private void addToEventLog(Report report) {
-		Event managerEvent = new EventBuilder()
-				.addEvent(EventType.MANAGER_REPORT).addMetaData(report.getId())
-				.build();
-		eventLog.add(managerEvent);
-	}
-
-	/**
-	 * Determines the number of pickings in each state
-	 * @param events
-	 * @return Map, where key is each state of the pickings,
-	 * and value - their number.
-	 */
-	private Map<EventType, Integer> countEvents(List<Event> events) {
-		Map<EventType, Integer> countOfEventType = new HashMap<EventType, Integer>();
-
-		countOfEventType.put(EventType.NEW_PICKING, 0);
-		countOfEventType.put(EventType.DISPATCH_PICKING, 0);
-		countOfEventType.put(EventType.TAKE_PICKING, 0);
-
-		for (Event e : events) {
-			EventType state = e.getEventType();
-			if (state == EventType.NEW_PICKING
-					|| state == EventType.DISPATCH_PICKING
-					|| state == EventType.TAKE_PICKING) {
-				int count = countOfEventType.get(state) + 1;
-				countOfEventType.put(state, count);
-
-				if (state != EventType.NEW_PICKING) {
-					String data = analizeMetaData(e.getMetaData())[1];
-					courriersId.add(data);
-				}
-
-			}
-		}
-		return countOfEventType;
-	}
-
-	private String[] analizeMetaData(String metaData) {
-		String[] data = metaData.split(",");
-
-		return data;
+		eventLog.add(Events.managerReport(report.getId()));
 	}
 
 }

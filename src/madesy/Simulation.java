@@ -17,12 +17,6 @@ public class Simulation {
 		ExecutorService pool = Executors.newFixedThreadPool(12);
 		
 		ManagerWorker manager = new ManagerWorker(eventLog, 5000);
-		Calendar fromDate = Calendar.getInstance();
-		Calendar toDate = Calendar.getInstance();
-		fromDate.set(2013, 9, 9, 0, 0, 0);
-		toDate.set(2013, 9, 10, 0, 0, 0);
-		manager.setFromDate(fromDate.getTime());
-		manager.setToDate(toDate.getTime());
 		
 		pool.submit(new ClientWorker(pickingsStorage, 100));
 		pool.submit(new ClientWorker(pickingsStorage, 750));
