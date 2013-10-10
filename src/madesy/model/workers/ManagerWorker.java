@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import madesy.builder.EventBuilder;
 import madesy.model.Event;
@@ -56,12 +55,12 @@ public class ManagerWorker extends BaseWorker {
 	public void doWork() {
 		System.out.println();
 		System.out.println(eventLog);
-		Report report = new Report(UUID.randomUUID().toString(), fromDate,
+		Report report = new Report(fromDate,
 				toDate);
 		List<Event> events = eventLog.getEventsFromPeriod(fromDate, toDate);
 		
-		report.getReport().addAll(makeReportForPickings(events));
-		report.getCourrierInfo().putAll(makeReportForCourriers(events));
+		report.getPickingsReport().addAll(makeReportForPickings(events));
+		report.getCourrierPickings().putAll(makeReportForCourriers(events));
 		
 		addToEventLog(report);
 		

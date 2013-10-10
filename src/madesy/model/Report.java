@@ -5,31 +5,30 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Report {
 	private String id;
-	private List<String> report;
-	private Map<String, Integer> courrierInfo;
+	private List<String> pickingsReport = new ArrayList<String>();
+	private Map<String, Integer> courrierPickings = new HashMap<String, Integer>();
 	private Date fromDate;
 	private Date toDate;
 	
-	public Report(String id, Date fromDate, Date toDate) {
-		this.id = id;
+	public Report(Date fromDate, Date toDate) {
+		this.id = UUID.randomUUID().toString();
 		this.fromDate = fromDate;
 		this.toDate = toDate;
-		report = new ArrayList<String>();
-		courrierInfo = new HashMap<String, Integer>();
 	}
 
 	@Override
 	public String toString() {
-		return "Report [id=" + id + ", report=" + report + ", courrierInfo="
-				+ courrierInfo + ", fromDate=" + fromDate + ", toDate="
+		return "Report [id=" + id + ", pickingsReport=" + pickingsReport + ", courrierPickings="
+				+ courrierPickings + ", fromDate=" + fromDate + ", toDate="
 				+ toDate + "]";
 	}
 	
-	public void addReportElement(String element) {
-		this.report.add(element);
+	public void add(String element) {
+		this.pickingsReport.add(element);
 	}
 	
 	@Override
@@ -58,32 +57,12 @@ public class Report {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public List<String> getPickingsReport() {
+		return pickingsReport;
 	}
 
-	public List<String> getReport() {
-		return report;
-	}
-
-	public Map<String, Integer> getCourrierInfo() {
-		return courrierInfo;
-	}
-
-	public Date getFromDate() {
-		return fromDate;
-	}
-
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
-
-	public Date getToDate() {
-		return toDate;
-	}
-
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
+	public Map<String, Integer> getCourrierPickings() {
+		return courrierPickings;
 	}
 
 }
