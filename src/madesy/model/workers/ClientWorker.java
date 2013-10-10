@@ -3,16 +3,13 @@ package madesy.model.workers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import madesy.model.Picking;
-import madesy.model.types.PickingStatus;
 import madesy.storage.PickingStorage;
 
 /**
- * Worker process used to simulate a client, requesting
- * to send a new picking.
- *
+ * Worker process used to simulate a client, requesting to send a new picking.
+ * 
  */
 public class ClientWorker extends BaseWorker {
 	private PickingStorage pickingStorage;
@@ -31,21 +28,21 @@ public class ClientWorker extends BaseWorker {
 
 	/**
 	 * Creates a random new picking.
+	 * 
 	 * @return
 	 */
 	private Picking makeNewPicking() {
-		String pickingId = UUID.randomUUID().toString();
 		Random random = new Random();
 
 		List<Integer> barcodes = new ArrayList<Integer>();
 		Integer barcode = random.nextInt(100000000);
 		barcodes.add(barcode);
-		Picking picking = new Picking(pickingId, barcodes, PickingStatus.NEW,
-				this.id);
+		Picking picking = new Picking(this.id);
+		picking.setBarcodes(barcodes);
 
 		return picking;
 	}
-	
+
 	public PickingStorage getPickingStorage() {
 		return pickingStorage;
 	}
