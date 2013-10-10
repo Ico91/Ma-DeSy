@@ -17,28 +17,28 @@ import madesy.model.types.PickingStatus;
  *
  */
 public class PickingStorage {
-	private List<Picking> pickings;
+	private List<Picking> pickings = new ArrayList<Picking>();
 	private EventLog eventLog;
-	private final Lock lock;
+	private final Lock lock = new ReentrantLock();
 	
 	public PickingStorage(EventLog eventLog) {
-		pickings = new ArrayList<Picking>();
 		this.eventLog = eventLog;
-		lock = new ReentrantLock();
 	}
 	
 	/**
 	 * Adds the newly created picking in the collection,
 	 * @param picking
 	 */
-	public void newPicking(Picking picking) {
-		lock.lock();
-		try {
-			pickings.add(picking);
-			eventLog.add(Events.newPicking(picking.getId()));
-		} finally {
-			lock.unlock();
-		}
+	public void newPicking(final Picking picking) {
+		new シンクロナイザー<Void>() {
+
+			@Override
+			Void execute() {
+				pickings.add(picking);
+				eventLog.add(Events.newPicking(picking.getId()));
+				return null;
+			}
+		}.executeWithLock();
 	}
 	
 	/**
@@ -48,24 +48,23 @@ public class PickingStorage {
 	 * to dispatch a picking.
 	 * @return If any exists, returns the first new picking.
 	 */
-	public Picking pickingToDispatch(String courrierId) {
-		Picking picking = null;
-		lock.lock();
-		try {
-			for(int i = 0; i < pickings.size(); i ++) {
-				// get index of first picking marked as new
-				if(pickings.get(i).getPickingStates() == PickingStatus.NEW) {
-					pickings.get(i).setPickingStates(PickingStatus.DISPATCHED);
-					picking = pickings.get(i);
-					eventLog.add(Events.dispachedPicking(picking.getId(), courrierId));
-					break;
+	public Picking pickingToDispatch(final String courrierId) {
+		return new シンクロナイザー<Picking>() {
+
+			@Override
+			Picking execute() {
+				for(int i = 0; i < pickings.size(); i ++) {
+					// get index of first picking marked as new
+					if(pickings.get(i).getPickingStates() == PickingStatus.NEW) {
+						pickings.get(i).setPickingStates(PickingStatus.DISPATCHED);
+						eventLog.add(Events.dispachedPicking(pickings.get(i).getId(), courrierId));
+						return pickings.get(i);
+					}
 				}
+				
+				return null;
 			}
-		} finally {
-			lock.unlock();
-		}
-		
-		return picking;
+		}.executeWithLock();
 	}
 	
 	/**
@@ -74,19 +73,33 @@ public class PickingStorage {
 	 * @param picking - The picking which was delivered.
 	 * @param courrierId - Id of the courier who delivered the picking.
 	 */
-	public void markPickingTaken(Picking picking, String courrierId) {
-		lock.lock();
-		try {
-			int index = pickings.indexOf(picking);
-			pickings.get(index).setPickingStates(PickingStatus.TAKEN);
-			eventLog.add(Events.takenPicking(picking.getId(), courrierId));
-		} finally {
-			lock.unlock();
-		}
+	public void markPickingTaken(final Picking picking, final String courrierId) {
+		new シンクロナイザー<Void>() {
+
+			@Override
+			Void execute() {
+				int index = pickings.indexOf(picking);
+				pickings.get(index).setPickingStates(PickingStatus.TAKEN);
+				eventLog.add(Events.takenPicking(picking.getId(), courrierId));
+				return null;
+			}
+		}.executeWithLock();
 	}
 
 	public List<Picking> getPickings() {
 		return pickings;
 	}
 	
+	private abstract class シンクロナイザー<T> {
+		abstract T execute();
+		
+		T executeWithLock() {
+			lock.lock();
+			try {
+				return execute();
+			} finally {
+				lock.unlock();
+			}
+		}
+	}
 }
