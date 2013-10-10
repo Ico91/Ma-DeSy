@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import madesy.builder.EventBuilder;
-import madesy.model.Event;
+import madesy.model.Events;
 import madesy.model.Picking;
-import madesy.model.types.EventType;
 import madesy.model.types.PickingStatus;
 
 /**
@@ -21,13 +19,11 @@ import madesy.model.types.PickingStatus;
 public class PickingStorage {
 	private List<Picking> pickings;
 	private EventLog eventLog;
-	private EventBuilder eventBuilder;
 	private final Lock lock;
 	
 	public PickingStorage(EventLog eventLog) {
 		pickings = new ArrayList<Picking>();
 		this.eventLog = eventLog;
-		eventBuilder = new EventBuilder();
 		lock = new ReentrantLock();
 	}
 	
@@ -39,8 +35,7 @@ public class PickingStorage {
 		lock.lock();
 		try {
 			pickings.add(picking);
-			Event newEvent = eventBuilder.addEvent(EventType.NEW_PICKING).addMetaData(picking.getId()).build();
-			eventLog.add(newEvent);
+			eventLog.add(Events.newPicking(picking.getId()));
 		} finally {
 			lock.unlock();
 		}
@@ -62,9 +57,7 @@ public class PickingStorage {
 				if(pickings.get(i).getPickingStates() == PickingStatus.NEW) {
 					pickings.get(i).setPickingStates(PickingStatus.DISPATCHED);
 					picking = pickings.get(i);
-					String metaData = generateMetaData(picking.getId(), courrierId);
-					Event newEvent = eventBuilder.addEvent(EventType.DISPATCH_PICKING).addMetaData(metaData).build();
-					eventLog.add(newEvent);
+					eventLog.add(Events.dispachedPicking(picking.getId(), courrierId));
 					break;
 				}
 			}
@@ -86,23 +79,10 @@ public class PickingStorage {
 		try {
 			int index = pickings.indexOf(picking);
 			pickings.get(index).setPickingStates(PickingStatus.TAKEN);
-			String metaData = generateMetaData(picking.getId(), courrierId);
-			Event newEvent = eventBuilder.addEvent(EventType.TAKE_PICKING).addMetaData(metaData).build();
-			eventLog.add(newEvent);
+			eventLog.add(Events.takenPicking(picking.getId(), courrierId));
 		} finally {
 			lock.unlock();
 		}
-	}
-
-	/**
-	 * Generates meta data for the event log.
-	 * @param pickingId - Id of the picking being delivered
-	 * @param courrierId - Id of the courier 
-	 * @return 
-	 */
-	private String generateMetaData(String pickingId, String courrierId) {
-		String metaData = pickingId + "," + courrierId;
-		return metaData;
 	}
 
 	public List<Picking> getPickings() {
