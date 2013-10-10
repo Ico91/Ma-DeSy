@@ -12,25 +12,15 @@ import madesy.model.Event;
  * on the picking storage.
  */
 public class EventLog {
-	private List<Event> eventLog;
+	private List<Event> eventLog = new CopyOnWriteArrayList<Event>();;
 	
 	public EventLog() {
-		eventLog = new CopyOnWriteArrayList<Event>();
 	}
 	
-	public void addEvent(Event event) {
+	public void add(Event event) {
 		this.eventLog.add(event);
 	}
 
-	@Override
-	public String toString() {
-		return "EventLog [eventLog=" + eventLog + "]";
-	}
-
-	public List<Event> getEventLog() {
-		return eventLog;
-	}
-	
 	/**
 	 * Returns a list of events based on the arguments for
 	 * from and to dates.
@@ -38,7 +28,7 @@ public class EventLog {
 	 * @param toDate
 	 * @return List of {@link madesy.model.Event}
 	 */
-	public List<Event> getEventsFromPeriod(Date fromDate, Date toDate) {
+	public List<Event> getEvents(Date fromDate, Date toDate) {
 		List<Event> eventsForPeriod = new ArrayList<Event>();
 		
 		for (Event event : eventLog) {
@@ -52,5 +42,14 @@ public class EventLog {
 		}
 		
 		return eventsForPeriod;
+	}
+	
+	public List<Event> getEvents() {
+		return eventLog;
+	}
+	
+	@Override
+	public String toString() {
+		return "EventLog [eventLog=" + eventLog + "]";
 	}
 }
