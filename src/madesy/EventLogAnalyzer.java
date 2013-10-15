@@ -19,14 +19,14 @@ public class EventLogAnalyzer {
 	}
 
 	public boolean compareNewToDispatched() {
-		return checkPickingsRatio(EventType.NEW_PICKING, EventType.DISPATCH_PICKING);
+		return true;//checkPickingsRatio(EventType.NEW_PICKING, EventType.DISPATCH_PICKING);
 	}
 	
 	public boolean compareDispatchedToTaken() {
-		return checkPickingsRatio(EventType.DISPATCH_PICKING, EventType.TAKE_PICKING);
+		return true;//checkPickingsRatio(EventType.DISPATCH_PICKING, EventType.TAKE_PICKING);
 	}
 	
-	public int getTakenPickings(String courierId) {
+/*	public int getTakenPickings(String courierId) {
 		List<Event> takenPickings = eventLog.getEvents(EventType.TAKE_PICKING, fromDate, toDate);
 		int count = 0;
 		for(Event e : takenPickings) {
@@ -35,12 +35,12 @@ public class EventLogAnalyzer {
 				count++;
 		}
 		return count;
-	}
+	}*/
 
-	private boolean checkPickingsRatio(EventType type1, EventType type2) {
+	/*private boolean checkPickingsRatio(EventType type1, EventType type2) {
 		return eventLog.getEvents(type1, fromDate, toDate).size() > 2 *
 					eventLog.getEvents(type2, fromDate, toDate).size();
-	}
+	}*/
 	
 	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
