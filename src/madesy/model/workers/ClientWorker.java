@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import madesy.model.Picking;
+import madesy.model.PickingService;
 import madesy.storage.PickingStorage;
 
 /**
@@ -12,17 +13,16 @@ import madesy.storage.PickingStorage;
  * 
  */
 public class ClientWorker extends BaseWorker {
-	private PickingStorage pickingStorage;
-
-	public ClientWorker(PickingStorage pickingStorage, int sleepTime) {
+	private PickingService pickingService;
+	
+	public ClientWorker(int sleepTime) {
 		super(sleepTime);
-		this.pickingStorage = pickingStorage;
 	}
 
 	@Override
 	public void doWork() {
 		threadToSleep();
-		pickingStorage.newPicking(this.makeNewPicking());
+		// TODO: Create new picking
 		threadToSleep();
 	}
 
@@ -41,13 +41,5 @@ public class ClientWorker extends BaseWorker {
 		picking.setBarcodes(barcodes);
 
 		return picking;
-	}
-
-	public PickingStorage getPickingStorage() {
-		return pickingStorage;
-	}
-
-	public void setPickingStorage(PickingStorage pickingStorage) {
-		this.pickingStorage = pickingStorage;
 	}
 }

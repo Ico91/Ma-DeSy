@@ -11,6 +11,7 @@ public class Picking {
 	private List<Integer> barcodes = new ArrayList<Integer>();
 	private PickingStatus pickingStatus;
 	private String senderId;
+	private String courierId;
 	
 	public Picking(String senderId) {
 		this.id = UUID.randomUUID().toString();
@@ -22,7 +23,7 @@ public class Picking {
 	public String toString() {
 		return "Picking [id=" + id + ", barcodes=" + barcodes
 				+ ", pickingStatus=" + pickingStatus + ", clientId=" + senderId
-				+ "]";
+				+ ", courierId" + courierId +"]" ;
 	}
 
 	@Override
@@ -72,4 +73,11 @@ public class Picking {
 		this.senderId = senderId;
 	}
 	
+	public void setCourierId(String courierId) {
+		this.courierId = courierId;
+	}
+	
+	public String getCourierId() {
+		return this.courierId;
+	}
 }
