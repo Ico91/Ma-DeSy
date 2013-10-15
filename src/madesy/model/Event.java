@@ -54,7 +54,7 @@ public class Event {
 		if (getClass() != obj.getClass())
 			return false;
 		Event other = (Event) obj;
-		if (eventId != other.eventId)
+		if (eventId.equals(other.eventId))
 			return false;
 		return true;
 	}

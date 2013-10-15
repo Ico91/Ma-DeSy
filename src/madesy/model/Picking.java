@@ -39,7 +39,7 @@ public class Picking {
 		if (!(obj instanceof Picking))
 			return false;
 		Picking other = (Picking) obj;
-		if (id != other.id)
+		if (id.equals(other.id))
 			return false;
 		return true;
 	}
