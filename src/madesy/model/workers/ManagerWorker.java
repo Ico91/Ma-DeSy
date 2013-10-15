@@ -43,7 +43,7 @@ public class ManagerWorker extends BaseWorker {
 		analyzer.setFromDate(fromDate);
 		analyzer.setToDate(toDate);
 		report.getPickingsReport().addAll(makeReportForPickings());
-		report.getCourrierPickings().putAll(makeReportForCourriers());
+		//report.getCourrierPickings().putAll(makeReportForCourriers());
 		
 		addToEventLog(report);
 		
@@ -77,7 +77,7 @@ public class ManagerWorker extends BaseWorker {
 	 * @return Map, where key is the id of each courier and value
 	 * the number of pickings delivered.
 	 */
-	private Map<String, Integer> makeReportForCourriers() {
+	/*private Map<String, Integer> makeReportForCourriers() {
 		Map<String, Integer> countCourrierPickings = new HashMap<String, Integer>();
 		Set<String> courierIds = eventLog.getCouriersId();
 		for(String id : courierIds) {
@@ -85,7 +85,7 @@ public class ManagerWorker extends BaseWorker {
 		}
 
 		return countCourrierPickings;
-	}
+	}*/
 	
 	/**
 	 * Adds the report creation event to the event log.
