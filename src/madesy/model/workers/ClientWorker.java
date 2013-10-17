@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import madesy.model.Picking;
 import madesy.model.PickingService;
+import madesy.storage.EventLog;
 import madesy.storage.PickingStorage;
 
 /**
@@ -14,32 +14,21 @@ import madesy.storage.PickingStorage;
  */
 public class ClientWorker extends BaseWorker {
 	private PickingService pickingService;
+	private String id;
 	
-	public ClientWorker(int sleepTime) {
+	public ClientWorker(String id, PickingStorage pickingStorage, EventLog eventLog, int sleepTime) {
 		super(sleepTime);
+		this.id = id;
+		this.pickingService = new PickingService(eventLog, pickingStorage);
 	}
 
 	@Override
 	public void doWork() {
-		threadToSleep();
-		// TODO: Create new picking
-		threadToSleep();
-	}
-
-	/**
-	 * Creates a random new picking.
-	 * 
-	 * @return
-	 */
-	private Picking makeNewPicking() {
-		Random random = new Random();
-
 		List<Integer> barcodes = new ArrayList<Integer>();
+		Random random = new Random();
 		Integer barcode = random.nextInt(100000000);
 		barcodes.add(barcode);
-		Picking picking = new Picking(this.id);
-		picking.setBarcodes(barcodes);
-
-		return picking;
+		pickingService.newPicking(id, barcodes);
 	}
+
 }

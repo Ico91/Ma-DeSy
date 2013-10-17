@@ -41,6 +41,12 @@ public class User {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password="
+				+ password + ", type=" + type + "]";
+	}
+
 	public String getId() {
 		return id;
 	}
