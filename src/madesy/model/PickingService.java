@@ -34,9 +34,11 @@ public class PickingService {
 				Picking picking = new Picking(senderId);
 				picking.setBarcodes(barcodes);
 				pickingStorage.add(picking);
-				eventLog.add(new Event(EventType.NEW_PICKING));
+				String data = picking.getId();
+				eventLog.add(new Event(EventType.NEW_PICKING, data));
 				pickingDispatcher.dispatchNewPicking(picking);
-				eventLog.add(new Event(EventType.DISPATCH_PICKING));
+				String metaData = picking.getId() + ", " + picking.getCourierId();
+				eventLog.add(new Event(EventType.DISPATCH_PICKING, metaData));
 				//System.out.println(eventLog);
 				return null;
 			}
@@ -77,8 +79,11 @@ public class PickingService {
 				Picking picking = pickingStorage.getPicking(pickingId);
 				picking.setPickingStates(PickingStatus.TAKEN);
 				courierSupervisor.decrementCarriedPickings(picking.getCourierId());
-				eventLog.add(new Event(EventType.TAKE_PICKING));
+				String metaData = pickingId + ", " + picking.getCourierId();
+				eventLog.add(new Event(EventType.TAKE_PICKING, metaData));
 				System.out.println(eventLog);
+				System.out.println("Track Picking");
+				System.out.println(eventLog.getPickingInfo(pickingId));
 				return null;
 			}
 			

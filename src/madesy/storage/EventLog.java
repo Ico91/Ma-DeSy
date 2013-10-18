@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import madesy.model.Event;
+import madesy.model.types.EventType;
 
 /**
  * Contains a list of events for all worker threads activities on the picking
@@ -43,13 +44,26 @@ public class EventLog {
 
 		return eventsForPeriod;
 	}
-	
+
 	public List<Event> getPickingInfo(String picikingId) {
 		List<Event> events = new ArrayList<Event>();
-		
+
+		for (Event e : eventLog) {
+			EventType type = e.getEventType();
+			String picId = splitMetaData(e.getMetaData())[0];
+
+			if (picId.equals(picikingId)) {
+				if (type == EventType.NEW_PICKING
+						|| type == EventType.DISPATCH_PICKING
+						|| type == EventType.TAKE_PICKING) {
+					events.add(e);
+				}
+			}
+		}
+
 		return events;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "EventLog [eventLog=" + eventLog + "]";
@@ -57,6 +71,12 @@ public class EventLog {
 
 	public List<Event> getEvents() {
 		return eventLog;
+	}
+
+	private String[] splitMetaData(String metaData) {
+		String[] data = metaData.split(", ");
+
+		return data;
 	}
 
 }
