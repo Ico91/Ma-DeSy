@@ -1,7 +1,7 @@
 package madesy.model;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class used to overseer the work of the couriers
@@ -9,7 +9,7 @@ import java.util.Map;
  *
  */
 public class CourierSupervisor {
-	private Map<String, Integer> couriers = new HashMap<String, Integer>();
+	private static Map<String, Integer> couriers = new ConcurrentHashMap<String, Integer>();
 	
 	public CourierSupervisor() {
 		for(User u : Users.getCouriers()) {
@@ -46,7 +46,6 @@ public class CourierSupervisor {
 		int courierPickings = (int)couriers.values().toArray()[0];
 		String courierId = (String)couriers.keySet().toArray()[0];
 		for(String id : couriers.keySet()) {
-			System.out.println("Courier id: " + id + " dispatched pickings: " + couriers.get(id));
 			if(couriers.get(id) < courierPickings) {
 				courierId = id;
 				courierPickings = couriers.get(id);

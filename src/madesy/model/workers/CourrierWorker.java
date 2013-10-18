@@ -23,7 +23,6 @@ public class CourrierWorker extends BaseWorker {
 		String pickingId = pickingService.getPickingByCourierId(id)
 				.getId();
 		if(pickingId != null) {
-			System.out.println("Take picking");
 			pickingService.setTaken(pickingId);
 		}
 	}

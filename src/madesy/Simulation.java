@@ -25,7 +25,7 @@ public class Simulation {
 			if(u.getType() == UserTypes.CLIENT)
 				pool.submit(new ClientWorker(u.getId(), pickingStorage, eventLog, rand.nextInt(10000)));
 			else if(u.getType() == UserTypes.COURIER)
-				pool.submit(new CourrierWorker(u.getId(), pickingStorage, eventLog, rand.nextInt(10000)));
+				pool.submit(new CourrierWorker(u.getId(), pickingStorage, eventLog, rand.nextInt(1000)));
 			//else
 				//pool.submit(new ManagerWorker(eventLog, 5000));
 		}

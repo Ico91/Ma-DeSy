@@ -14,7 +14,7 @@ public class PickingService {
 	private PickingDispatcher pickingDispatcher = new PickingDispatcher();
 	private CourierSupervisor courierSupervisor = new CourierSupervisor();
 	private EventLog eventLog;
-	private Lock lock = new ReentrantLock();
+	private static final Lock lock = new ReentrantLock();
 	
 	public PickingService(EventLog eventLog, PickingStorage pickingStorage) {
 		this.eventLog = eventLog;
@@ -37,7 +37,7 @@ public class PickingService {
 				eventLog.add(new Event(EventType.NEW_PICKING));
 				pickingDispatcher.dispatchNewPicking(picking);
 				eventLog.add(new Event(EventType.DISPATCH_PICKING));
-				System.out.println(eventLog);
+				//System.out.println(eventLog);
 				return null;
 			}
 			
