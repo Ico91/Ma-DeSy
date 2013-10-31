@@ -1,5 +1,6 @@
 package madesy.model.workers;
 
+import madesy.model.Picking;
 import madesy.model.PickingService;
 import madesy.storage.EventLog;
 import madesy.storage.PickingStorage;
@@ -10,23 +11,22 @@ import madesy.storage.PickingStorage;
  */
 public class CourrierWorker extends BaseWorker {
 	private PickingService pickingService;
-	private String id;
 
-	public CourrierWorker(String id, PickingStorage pickingStorage, EventLog eventLog, int sleepTime) {
-		super(sleepTime);
-		this.id = id;
+	public CourrierWorker(String id, PickingStorage pickingStorage,
+			EventLog eventLog, int sleepTime) {
+		super(id, sleepTime);
 		this.pickingService = new PickingService(eventLog, pickingStorage);
 	}
 
 	@Override
 	public void doWork() {
-		String pickingId = pickingService.getPickingByCourierId(id)
-				.getId();
-		if(pickingId != null) {
-			pickingService.setTaken(pickingId);
+		Picking picking = pickingService.getPickingByCourierId(id);
+		if (picking != null) {
+			String pickingId = picking.getId();
+			pickingService.setTaken(id, pickingId);
 		}
 	}
-	
+
 	public String getId() {
 		return this.id;
 	}
